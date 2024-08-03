@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Remotes: Pull (or Merge) Request Flow | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Remotes: Pull (or Merge) Request Flow" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="remotes-2.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/remotes-2.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Remotes: Pull (or Merge) Request Flow" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Remotes: Pull (or Merge) Request Flow","url":"http://fundamentals.gitgood.training/labs/remotes-2.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      
+<h1 id="remotes-pull-or-merge-request-flow">Remotes: Pull (or Merge) Request Flow</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>Continue working with your personal <code class="language-plaintext highlighter-rouge">my-book</code> project, which should now also be hosted on a remote platform.</p>
+
+<p>You will get exposure to the <em>pull/merge request flow</em> by pushing branches that contain work, opening a PR, code reviewing said PR and then merging it into a target branch, typically the mainline.</p>
+
+<p>After the mainline (<code class="language-plaintext highlighter-rouge">main</code>, <code class="language-plaintext highlighter-rouge">master</code>, etc) has an update, you’ll want to synchronize your local with those changes – which we’ll accomplish with <code class="language-plaintext highlighter-rouge">pull</code>.</p>
+
+<hr />
+
+<p>The “pull request” (or “merge request” in GitLab) is a construct that remotes provide to “request to merge” a set of changes into a target branch. The pull request allows a team to review and approve/deny incoming changes. If approved the team can choose to <code class="language-plaintext highlighter-rouge">merge</code> the pull request, which will do a normal <code class="language-plaintext highlighter-rouge">git merge</code> from the source branch into the target branch.</p>
+
+<p>The typical workflow of an individual contributor will be:</p>
+
+<ol>
+  <li>Get a ticket/issue</li>
+  <li>Start a new branch from the mainline</li>
+  <li>Do work on that branch</li>
+  <li>Push the branch to the remote</li>
+  <li>Open a pull request - this tells the team about the work being done</li>
+  <li>The team reviews - approves or denies</li>
+</ol>
+
+<p>If the pull request is not accepted you can continue to push additional changes (via <code class="language-plaintext highlighter-rouge">commits</code>) into the same branch and the original pull request will be updated.</p>
+
+<hr />
+
+<h2 id="1-work-in-a-new-branch">1. Work in a new branch</h2>
+
+<p>On your local, <strong>create a new branch</strong> from <code class="language-plaintext highlighter-rouge">main</code> to contain some work.</p>
+
+<p>Then add a new file, <code class="language-plaintext highlighter-rouge">a-twist.md</code> with some simple text contents.</p>
+
+<blockquote>
+  <p>⚠️ You can add any change you like, it doesn’t have to follow my script - as long as you make a change you can commit and push.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># make sure you're starting from the latest copy of main:</span>
+git switch main
+
+<span class="c"># create the file and edit it to give it some contents</span>
+<span class="nb">touch </span>a-twist.md
+
+<span class="c"># stage it</span>
+git add a-twist.md
+
+<span class="c"># it's OK if you find yourself working on `main` (and even staging) before committing</span>
+<span class="c"># just don't commit on main!</span>
+<span class="c">#</span>
+<span class="c"># switch over to the new branch now...</span>
+git switch <span class="nt">-c</span> twist-ending
+
+<span class="c"># commit to the branch</span>
+git commit
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="2-share-your-work">2. Share your work</h2>
+
+<p><strong>Push your branch</strong> to the remote, optionally setting tracking:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin twist-ending <span class="nt">-u</span>
+</code></pre></div></div>
+
+<p>After pushing, <strong>open a pull/merge request</strong> on the remote platform to <strong>merge <code class="language-plaintext highlighter-rouge">twist-ending</code> into <code class="language-plaintext highlighter-rouge">main</code></strong>.</p>
+
+<p>Once you have a pull/merge request created, take some time to explore the pull/merge request page and tabs that are provided.</p>
+
+<p><strong>a. Can you find the commits that will be introduced when the branch is merged?</strong></p>
+
+<p>This is the same as running <code class="language-plaintext highlighter-rouge">git log main..twist-ending</code> on your local.</p>
+
+<p><strong>b. Can you find the file changes that will be introduced?</strong></p>
+
+<p>This is the same as running <code class="language-plaintext highlighter-rouge">git diff main...twist-ending</code> on your local.</p>
+
+<hr />
+
+<h2 id="3-release-your-work">3. Release your work</h2>
+
+<p><strong>Merge your pull request</strong> on the remote platform. When merging, opt to delete the <code class="language-plaintext highlighter-rouge">twist-ending</code> branch <em>on the remote</em> (not local). This should be a default option when clicking “merge”.</p>
+
+<p>Look at your repository’s front page on the remote platform - you should see the new file you added exists on the <em>hosted</em> <code class="language-plaintext highlighter-rouge">main</code> branch.</p>
+
+<p><strong>Does it exist locally yet?</strong> Nope, you still need to synchronize…</p>
+
+<hr />
+
+<h2 id="4-create-work-in-an-out-dated-branch">4. Create work in an out-dated branch</h2>
+
+<p><strong>Before you synchronize your local</strong> let’s do some additional work in a new branch.</p>
+
+<blockquote>
+  <p>🔎 I intentionally have you doing new work in an <em>out of date</em> version of <code class="language-plaintext highlighter-rouge">main</code> so we can practice <em>getting up to date</em> later.</p>
+</blockquote>
+
+<p><strong>Create a new branch</strong>, <code class="language-plaintext highlighter-rouge">refs-and-credits</code>, off <code class="language-plaintext highlighter-rouge">main</code> to contain a <code class="language-plaintext highlighter-rouge">references.md</code> file. Stage and commit the change on the new branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git switch <span class="nt">-c</span> refs-and-credits
+<span class="nb">touch </span>references.md
+git add references.md
+git commit <span class="nt">-m</span> <span class="s1">'A list of references for the book'</span>
+</code></pre></div></div>
+
+<p>OK, great - you now have a branch, <code class="language-plaintext highlighter-rouge">refs-and-credits</code> that is based on a slightly out-of-date copy of <code class="language-plaintext highlighter-rouge">main</code>. The version of <code class="language-plaintext highlighter-rouge">main</code> on the remote has some new work (the <code class="language-plaintext highlighter-rouge">a-twist.md</code> file) but your local <code class="language-plaintext highlighter-rouge">main</code> does not yet have that.</p>
+
+<p>Finally, <strong><code class="language-plaintext highlighter-rouge">push</code> this new branch up to the <code class="language-plaintext highlighter-rouge">origin</code></strong> and <strong>open a second pull request</strong> on the remote, requesting to merge <code class="language-plaintext highlighter-rouge">refs-and-credits</code> into <code class="language-plaintext highlighter-rouge">main</code>. Don’t merge it.</p>
+
+<hr />
+
+<h2 id="4-synchronize-main">4. Synchronize <code class="language-plaintext highlighter-rouge">main</code></h2>
+
+<p>Now it’s time to <strong>get your local up to date</strong> via <code class="language-plaintext highlighter-rouge">pull</code> – we want to get anything new from the <code class="language-plaintext highlighter-rouge">origin</code> remote (such as that <code class="language-plaintext highlighter-rouge">twist-ending</code> we already merged on the remote).</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># make sure you're on main</span>
+git switch main
+
+git pull
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ If <code class="language-plaintext highlighter-rouge">git pull</code> fails then you probably did not set up “tracking”. You can then use the full command: <code class="language-plaintext highlighter-rouge">git pull origin main</code></p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">pull</code> will synchronize the branch you are on (<code class="language-plaintext highlighter-rouge">HEAD</code>) with a remote counterpart, in this case, <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+<blockquote>
+  <p>🔎 <code class="language-plaintext highlighter-rouge">git pull</code> is actually just doing a normal <code class="language-plaintext highlighter-rouge">merge</code> between a <code class="language-plaintext highlighter-rouge">remote ref</code> (<code class="language-plaintext highlighter-rouge">origin/main</code>) and your local <code class="language-plaintext highlighter-rouge">main</code> branch. Before it does the merge, however, it also downloads and refreshes the <code class="language-plaintext highlighter-rouge">remote ref</code> so you have the latest version from the remote – <code class="language-plaintext highlighter-rouge">pull</code> does a <code class="language-plaintext highlighter-rouge">fetch</code> and then a <code class="language-plaintext highlighter-rouge">merge</code>:</p>
+
+  <p>You could also:</p>
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch origin main
+git switch main
+git merge origin/main
+</code></pre></div>  </div>
+</blockquote>
+
+<p><strong>List your files</strong> to verify that <code class="language-plaintext highlighter-rouge">a-twist.md</code> now exists in your local <code class="language-plaintext highlighter-rouge">main</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> <span class="nt">-la</span>
+</code></pre></div></div>
+
+<p><strong>List <em>all</em> your branches</strong> to see the new <code class="language-plaintext highlighter-rouge">remote refs</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-a</span>
+</code></pre></div></div>
+
+<p>Even though you may have deleted <code class="language-plaintext highlighter-rouge">twist-ending</code> on the remote, a <code class="language-plaintext highlighter-rouge">remote ref</code> still exists for it. Remote references are how your local repository keeps track of where it <em>thinks</em> the <code class="language-plaintext highlighter-rouge">origin</code> remote branches, since the last time you performed a <code class="language-plaintext highlighter-rouge">fetch</code>.</p>
+
+<p>Let’s tell git to clean those remote refs now with a <em>prune</em>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch origin <span class="nt">--prune</span>
+
+<span class="c"># this should no longer show the deleted branches</span>
+git branch <span class="nt">-a</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="5-synchronize-your-other-feature-branch">5. Synchronize your other feature branch</h2>
+
+<p>Remember that <code class="language-plaintext highlighter-rouge">refs-and-credits</code> branch? It’s currently “out of date”, meaning it is <em>behind</em> <code class="language-plaintext highlighter-rouge">main</code>. <strong>Switch to that branch</strong> and take a look:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch refs-and-credits
+<span class="nb">ls</span> <span class="nt">-la</span>
+</code></pre></div></div>
+
+<p>There is no <code class="language-plaintext highlighter-rouge">a-twist.md</code> file. Let’s compare:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># this will display changes in main that are not in my current branch</span>
+git diff HEAD...main
+
+<span class="c"># this will show commits in main that are not in my current branch</span>
+git log HEAD..main
+</code></pre></div></div>
+
+<p>To get our <code class="language-plaintext highlighter-rouge">refs-and-credits</code> branch up to date you can use one of these three approaches:</p>
+
+<p>Option 1 - just sync directly with the remote version of main:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull origin main
+</code></pre></div></div>
+
+<p>Option 2 - merge your local main; is it fully up to date though?:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># make sure your local main is up to date - you already did that in the last step</span>
+git merge main
+</code></pre></div></div>
+
+<p>Option 3 - sync then merge your remote ref of the origin’s main branch:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch origin
+git merge origin/main
+</code></pre></div></div>
+
+<p>All three options are just merging the latest copy of <code class="language-plaintext highlighter-rouge">main</code> into your <em>current branch</em> to bring in the updates.</p>
+
+<p><strong>Go ahead and do this now</strong>, bringing <code class="language-plaintext highlighter-rouge">refs-and-credits</code> up to date.</p>
+
+<p>When you’re done, push your updated <code class="language-plaintext highlighter-rouge">refs-and-credits</code> to the remote. It should also update the related pull request.</p>
+
+<hr />
+
+<h2 id="bonus-1">Bonus #1:</h2>
+
+<p>How might you go about renaming a branch that already has a <em>pull request</em> open?</p>
+
+<p>Let’s rename <code class="language-plaintext highlighter-rouge">refs-and-credits</code> to <code class="language-plaintext highlighter-rouge">book-credits</code>.</p>
+
+<p>Locally it is fairly simple.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-m</span> refs-and-credits book-credits
+</code></pre></div></div>
+
+<p>To update the branch on the remote we’ll need to delete the original and push the new branch.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin refs-and-credits <span class="nt">--delete</span>
+git push origin book-credits
+</code></pre></div></div>
+
+<p>One last step here is to go to the remote and <em>delete</em> the original <em>pull request</em> and create a new one for the new branch.</p>
+
+
+      </section>
+     
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

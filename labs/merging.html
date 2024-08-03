@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Merging | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Merging" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="merging.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/merging.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Merging" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Merging","url":"http://fundamentals.gitgood.training/labs/merging.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      <h1 id="merging">Merging</h1>
+
+<h2 id="overview">Overview:</h2>
+
+<p>Keep working in your previous project, <code class="language-plaintext highlighter-rouge">my-book</code>. You should have at least three branches from the previous lab (branching) that you can use here.</p>
+
+<p>We’ll practice comparing changes across branches and then merging those changes in.</p>
+
+<blockquote>
+  <p>⚠️ Depending on your version of git, your default branch will be either <code class="language-plaintext highlighter-rouge">master</code> or <code class="language-plaintext highlighter-rouge">main</code>. The sample code below uses <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+  <p>If you want to change your branch name you can:</p>
+
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch master
+git branch <span class="nt">-m</span> main
+</code></pre></div>  </div>
+
+</blockquote>
+
+<hr />
+
+<blockquote>
+  <h2 id="dont-have-the-my-book-repository-from-the-previous-lab">Don’t have the <code class="language-plaintext highlighter-rouge">my-book</code> repository from the previous lab?</h2>
+
+  <p>You can clone this repository: https://github.com/rm-training/demo-my-book-branches</p>
+
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># STEP 1: Clone</span>
+git clone https://github.com/rm-training/demo-my-book-branches
+<span class="nb">cd </span>demo-my-book-branches
+
+<span class="c"># the branches all exist here, but they are not copied locally yet</span>
+git branch <span class="nt">--all</span>
+
+<span class="c"># STEP 2: Create local copies of each branch</span>
+git switch add-chapter-1
+git switch add-chapter-2
+git switch the-intro
+
+<span class="c"># STEP 3: Then delete the remote (this will clean up your log for the lab)</span>
+git remote <span class="nb">rm </span>origin
+</code></pre></div>  </div>
+
+  <p>If you have issues cloning (due to SSL cert / spoofing / VPN) try:</p>
+
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nt">-c</span> http.sslVerify<span class="o">=</span><span class="nb">false </span>clone https://github.com/rm-training/demo-my-book-branches
+</code></pre></div>  </div>
+
+  <p><em>Now you’re all set</em></p>
+</blockquote>
+
+<hr />
+
+<h2 id="1-getting-started">1. Getting started</h2>
+
+<p>Make sure you have no pending changes and you have the right branches for this exercise by checking your <code class="language-plaintext highlighter-rouge">status</code>, <code class="language-plaintext highlighter-rouge">branch</code> list and the <code class="language-plaintext highlighter-rouge">log</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status
+On branch add-chapter-2
+nothing to commit, working tree clean
+
+<span class="nv">$&gt;</span> git branch
+  add-chapter-1
+<span class="k">*</span> add-chapter-2
+  main
+  the-intro
+
+<span class="nv">$&gt;</span> git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+<span class="k">*</span> a840d1c <span class="o">(</span>HEAD -&gt; add-chapter-2<span class="o">)</span> Created Chapter 2
+| <span class="k">*</span> ca05c2e <span class="o">(</span>add-chapter-1<span class="o">)</span> Created Chapter 1
+|/  
+| <span class="k">*</span> 344b256 <span class="o">(</span>the-intro<span class="o">)</span> Updated the introduction
+| <span class="k">*</span> 957dc19 Added the introduction
+|/  
+<span class="k">*</span> b030b1a <span class="o">(</span>main<span class="o">)</span> First commit
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ You <em>may</em> have extra branches if you did any of the previous bonuses.</p>
+</blockquote>
+
+<p>All good? Great!</p>
+
+<hr />
+
+<h2 id="2-comparing">2. Comparing</h2>
+
+<p>What file changes will be introduced when we merge <code class="language-plaintext highlighter-rouge">add-chapter-1</code>? <code class="language-plaintext highlighter-rouge">diff</code> can help us see that.</p>
+
+<p><strong>Compare the state of the files</strong> in <code class="language-plaintext highlighter-rouge">add-chapter-1</code> to <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff main...add-chapter-1
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 The <code class="language-plaintext highlighter-rouge">diff ..</code> operator would have shown the collective difference, while <code class="language-plaintext highlighter-rouge">...</code> is just the difference in the second argument, <code class="language-plaintext highlighter-rouge">add-chapter-1</code>.</p>
+</blockquote>
+
+<p>Then <strong>use <code class="language-plaintext highlighter-rouge">log</code> to see the new commits</strong> you’ll be introducing when you merge:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log main..add-chapter-1
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-merging-to-release">3. Merging to “Release”</h2>
+
+<p>Let’s consider the work in <code class="language-plaintext highlighter-rouge">add-chapter-1</code> complete - therefore we’re going to “release” it by merging it into our mainline branch, <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+<blockquote>
+  <p>🔎 I’m using the word “release” loosely here. All we’re  doing is combining our work in <code class="language-plaintext highlighter-rouge">add-chapter-1</code> with another branch.</p>
+
+  <p>For many teams, “merging into the mainline/trunk” will be performed on a platform like GitHub, GitLab, BitBucket or Gerrit, since we can require code reviews and trigger an automated pipeline to be run before changes are merged.</p>
+</blockquote>
+
+<p>Make sure you’re on the <code class="language-plaintext highlighter-rouge">main</code> branch, then <strong>merge <code class="language-plaintext highlighter-rouge">add-chapter-1</code> into <code class="language-plaintext highlighter-rouge">main</code></strong>.</p>
+
+<blockquote>
+  <p>⚠️ Remember, <code class="language-plaintext highlighter-rouge">merge</code> affects the branch <em>you are on</em>.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git merge add-chapter-1
+</code></pre></div></div>
+
+<p>What type of merge did it perform? <strong>Check your graph to see the outcome</strong>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--oneline</span> <span class="nt">--graph</span>
+</code></pre></div></div>
+
+<p><strong>You should have seen a <em>fast forward</em> merge</strong>. If not, this means you did some new work on <code class="language-plaintext highlighter-rouge">main</code> as well. It’s not terrible, but generally bad practice when collaborating with a team.</p>
+
+<hr />
+
+<h2 id="4-comparing-take-two">4. Comparing, take two</h2>
+
+<p>Let’s see what file changes will be introduced when we merge <code class="language-plaintext highlighter-rouge">add-chapter-2</code>.</p>
+
+<p><strong>Compare the state of the files</strong> in <code class="language-plaintext highlighter-rouge">add-chapter-2</code> to <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff main...add-chapter-2
+</code></pre></div></div>
+
+<p>How is that output different from <code class="language-plaintext highlighter-rouge">git diff main..add-chapter-2</code> (the <code class="language-plaintext highlighter-rouge">..</code> operator)?</p>
+
+<p>Also <strong>view the new commits</strong> you’ll be introducing:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log main..add-chapter-2
+</code></pre></div></div>
+
+<p>How is that output different from <code class="language-plaintext highlighter-rouge">git log main...add-chapter-2</code> (the <code class="language-plaintext highlighter-rouge">..</code> operator)?</p>
+
+<hr />
+
+<h2 id="5-release-chapter-2">5. Release “Chapter 2”</h2>
+
+<p>Let’s assume our work on <code class="language-plaintext highlighter-rouge">chapter2.md</code> is also considered done. Merge it into <code class="language-plaintext highlighter-rouge">main</code> to release it.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge add-chapter-2
+</code></pre></div></div>
+
+<p>What type of merge did it perform?</p>
+
+<p><strong>View the graph</strong>: <code class="language-plaintext highlighter-rouge">git log --oneline --graph --all</code>.</p>
+
+<p>You should have seen a <em>recursive</em> merge happen, which requires a commit message (from you) and creates a new “merge commit”.</p>
+
+<p><strong>Inspect the new <code class="language-plaintext highlighter-rouge">merge commit</code></strong> - does it contain any file changes? There won’t be changes, unless there was a conflict that had to be resolved with that merge. A merge commit just ties two (or more) histories together.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git show HEAD
+</code></pre></div></div>
+
+<p><strong>Can you determine which commit ids are the “first parent” and “second parent” of the merge commit you just created</strong>?</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># inspect the first parent</span>
+git show HEAD^
+
+<span class="c"># inspect the second parent</span>
+git show HEAD^2
+
+<span class="c"># look at how the commit stores the list of "parents"</span>
+git cat-file <span class="nt">-p</span> HEAD
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="6-branch-cleanup">6. Branch Cleanup</h2>
+
+<p><strong>View which branches we’ve merged</strong> and which still have work to merge in. We can filter the branch list like so:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git branch <span class="nt">--merged</span>
+git branch <span class="nt">--no-merged</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 Filtering the branch list like this is actually checking for branches that are merged into your <em>current branch</em>. So, if you aren’t “on” <code class="language-plaintext highlighter-rouge">main</code> then you’ll possibly see different results.</p>
+</blockquote>
+
+<p>Both <code class="language-plaintext highlighter-rouge">add-chapter-1</code> and <code class="language-plaintext highlighter-rouge">add-chapter-2</code> are merged.</p>
+
+<p><strong>Delete the merged branches</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-d</span> add-chapter-1 add-chapter-2
+</code></pre></div></div>
+
+<p>What about <code class="language-plaintext highlighter-rouge">the-intro</code>? What happens if you attempt to delete it with <code class="language-plaintext highlighter-rouge">-d</code>?</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-d</span> the-intro
+</code></pre></div></div>
+
+<p>With the lowercase <code class="language-plaintext highlighter-rouge">-d</code> flag, git will prevent you from accidentally deleting a branch that is not yet merged into your current branch.</p>
+
+<blockquote>
+  <p>🔎 <strong>Do not actually delete <code class="language-plaintext highlighter-rouge">the-intro</code></strong>. Just FYI: You can force delete a branch with <code class="language-plaintext highlighter-rouge">-D</code> – but don’t try this just yet! We still want to work on <code class="language-plaintext highlighter-rouge">the-intro</code></p>
+</blockquote>
+
+<hr />
+
+<h2 id="7-get-the-intro-up-to-date">7. Get <code class="language-plaintext highlighter-rouge">the-intro</code> up to date</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">the-intro</code> branch is now a little behind <code class="language-plaintext highlighter-rouge">main</code> – there are changes in <code class="language-plaintext highlighter-rouge">main</code> that are not in <code class="language-plaintext highlighter-rouge">the-intro</code>.</p>
+
+<p>It’s a good idea to keep your branches <em>up to date</em> with their intended target branch. This reduces the chance of a conflict <em>and</em> makes sure your work in progress now has changes your team have released (ex: an important bug fix).</p>
+
+<p>Get your <code class="language-plaintext highlighter-rouge">the-intro</code> branch “up to date” with the latest changes from <code class="language-plaintext highlighter-rouge">main</code> by <strong>merging <code class="language-plaintext highlighter-rouge">main</code> into <code class="language-plaintext highlighter-rouge">the-intro</code></strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch the-intro
+git merge main
+</code></pre></div></div>
+
+<p>That’s it! Your branch is now fully “up to date”.</p>
+
+<blockquote>
+  <p>🔎 In the real world you might use <code class="language-plaintext highlighter-rouge">git pull</code> or <code class="language-plaintext highlighter-rouge">git pull --rebase</code> to get up to date. <code class="language-plaintext highlighter-rouge">pull</code> is a git command that is used to merge from a remote branch – that is, a branch that exists on your team’s remote (GitHub, GitLab, Gerrit, etc) – for now, we aren’t using any remote branches.</p>
+</blockquote>
+
+<p>We’re all done, so now you can <strong>merge <code class="language-plaintext highlighter-rouge">the-intro</code> into <code class="language-plaintext highlighter-rouge">main</code></strong> to release it (and then delete it):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+
+git merge the-intro
+
+git branch <span class="nt">-d</span> the-intro
+</code></pre></div></div>
+
+<p>Did you notice what type of merge it performed?</p>
+
+<p>You should have seen a <em>fast forward</em> merge. <strong>Any idea why</strong>?</p>
+
+<blockquote>
+  <p>It’s <em>nice</em> but <em>not required</em> to “get up to date” (merge <code class="language-plaintext highlighter-rouge">main</code> into your feature branch) before you release (merge into <code class="language-plaintext highlighter-rouge">main</code>). We’re practicing getting up to date - something you’ll likely do many times a day on your freature branches while you work on them.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="bonus-1">Bonus #1</h2>
+
+<p>Is there anything special about the branch named <code class="language-plaintext highlighter-rouge">main</code> (or <code class="language-plaintext highlighter-rouge">master</code>, if you are on an older version of git)? Nope! Just that most teams consider it the mainline.</p>
+
+<p>Try renaming the <code class="language-plaintext highlighter-rouge">main</code> branch to something else, like <code class="language-plaintext highlighter-rouge">primary</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-m</span> main primary
+
+<span class="c"># fails</span>
+git switch main
+<span class="c"># works</span>
+git switch primary
+</code></pre></div></div>
+
+<p>It’s a good idea for everyone on the team to use the same name for the mainline and any other <em>special branches</em>.</p>
+
+<p>Without renaming, how can you recreate <code class="language-plaintext highlighter-rouge">main</code>?</p>
+
+<details>
+<summary>The solution...</summary>
+  
+<pre class="highlight">
+# be on primary...
+git switch primary
+git switch -c main
+
+# or you could run this from any location:
+# git branch main primary
+</pre>
+</details>
+
+<p><br /></p>
+
+<p>After you solved it…</p>
+
+<p>Delete <code class="language-plaintext highlighter-rouge">primary</code> when you’re done.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-d</span> primary
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-2">Bonus #2</h2>
+
+<p>Some teams prefer to require a “merge commit” when any branch is <em>released</em>, that is, merged into the mainline. Merge commits provide an easy way to <code class="language-plaintext highlighter-rouge">revert</code> a merge, rolling back a release.</p>
+
+<p><strong>Undo the fast-forward merge</strong> that just happened and <strong>then re-do the merge</strong>, but this time require a “merge commit”</p>
+
+<p><strong>Need a hint?</strong> To undo a fast-forward merge, you’re going to use <code class="language-plaintext highlighter-rouge">reset</code>. You need to determine the right commit id to “reset to”. It’s a fast-forward merge, so just using <code class="language-plaintext highlighter-rouge">reset HEAD^</code> <em>might</em> not be sufficient.</p>
+
+<details>
+
+<summary>The solution...</summary>
+
+<pre class="highlight">
+git reset ORIG_HEAD --hard
+
+</pre>
+
+</details>
+
+<p><br /></p>
+
+<blockquote>
+  <p>⚠️ A word of warning: <code class="language-plaintext highlighter-rouge">reset</code> should only really be used on branches and commits that are <em>not yet used</em> by your team.</p>
+
+  <p>🔎 This is because <code class="language-plaintext highlighter-rouge">reset</code> modifies the graph (typically by going backwards or traversing history) versus <code class="language-plaintext highlighter-rouge">commit</code> and <code class="language-plaintext highlighter-rouge">merge</code>, which are always adding to the graph and moving history <em>forward</em>. <code class="language-plaintext highlighter-rouge">git</code> is not able safely synchronize (merge in) changes due to a <code class="language-plaintext highlighter-rouge">reset</code> and so they are generally avoided on shared branches like <code class="language-plaintext highlighter-rouge">main</code> or <code class="language-plaintext highlighter-rouge">master</code>.</p>
+
+  <p><code class="language-plaintext highlighter-rouge">revert</code> is the more appropriate command to undo a change on a shared branch.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="bonus-3">Bonus #3</h2>
+
+<p>A lot of teams like to “squash” many commits into one - you can do this <em>during a merge</em>, if you wish (though I would argue this is not typical – usually <code class="language-plaintext highlighter-rouge">rebase</code> is the command we’ll use to help us <code class="language-plaintext highlighter-rouge">squash</code>).</p>
+
+<p>Create a new branch, <code class="language-plaintext highlighter-rouge">squashable-chapter</code>, and make at last two new commits on that branch.</p>
+
+<p>Try “releasing” that branch into <code class="language-plaintext highlighter-rouge">main</code> but this time use <code class="language-plaintext highlighter-rouge">merge --squash</code> to see what happens.</p>
+
+<p>You’ll notice that it doesn’t automatically commit, but does “squash” all changes into your working directory and staging area.</p>
+
+<hr />
+
+<h2 id="done-checkpoint">Done! Checkpoint</h2>
+
+<p>Make sure:</p>
+<ol>
+  <li>You have no work in progress via <code class="language-plaintext highlighter-rouge">git status</code></li>
+  <li>You removed all branches except <code class="language-plaintext highlighter-rouge">main</code></li>
+  <li>You’re back on <code class="language-plaintext highlighter-rouge">main</code></li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+git branch 
+git switch main
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

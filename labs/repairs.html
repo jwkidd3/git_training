@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Repairs | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Repairs" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="repairs.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/repairs.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Repairs" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Repairs","url":"http://fundamentals.gitgood.training/labs/repairs.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      <h1 id="repairs">Repairs</h1>
+
+<p>We’ll practice a few commands, including <code class="language-plaintext highlighter-rouge">cherry-pick</code>, <code class="language-plaintext highlighter-rouge">revert</code> and <code class="language-plaintext highlighter-rouge">reset</code>.</p>
+
+<hr />
+
+<h2 id="setup">Setup</h2>
+
+<p>To begin, <code class="language-plaintext highlighter-rouge">clone</code> my repository:
+https://github.com/rm-training/lab-revert-me</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/rm-training/lab-revert-me
+<span class="nb">cd </span>revert-me
+</code></pre></div></div>
+
+<blockquote>
+  <p>This project is a pretty basic book - surprise!</p>
+</blockquote>
+
+<hr />
+
+<h2 id="undo-an-edit">Undo an edit</h2>
+
+<p>I released something into <code class="language-plaintext highlighter-rouge">master</code> weeks ago, modifying <code class="language-plaintext highlighter-rouge">chapter1.md</code> so that it had a silly line, “There was definitely some rain…”. I’d like to undo this change.</p>
+
+<p>Help me out by finding these commit(s) in the <code class="language-plaintext highlighter-rouge">log</code> and reverting them.</p>
+
+<blockquote>
+  <p>🔎 In the real world, with a simple one-liner like this I would probably just create a branch and manually undo the change - commit - push - open a pull/merge request and be done with it. However, lets assume that this change is actually quite large and hard for me to do by hand.</p>
+
+  <p>To undo this change, we’re going to <code class="language-plaintext highlighter-rouge">revert</code> it (rather than <code class="language-plaintext highlighter-rouge">reset</code>, which modifies history). In order to <code class="language-plaintext highlighter-rouge">revert</code> the change we first have to find the commit(s).</p>
+</blockquote>
+
+<p>Here are some examples of searching the log, to get you started:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># all commits that have changes to a file</span>
+git log <span class="nt">--oneline</span> <span class="nt">--</span> chapter1.md
+
+<span class="c"># all commits, including patch info</span>
+git log <span class="nt">--oneline</span> <span class="nt">-p</span> <span class="nt">--</span> chapter1.md
+
+<span class="c"># all commits that include the string "rain" in their patch</span>
+git log <span class="nt">-G</span> <span class="s2">"rain"</span> <span class="nt">--</span> chapter1.md
+
+<span class="c"># combine it all to help find those 2 commits:</span>
+git log <span class="nt">--oneline</span> <span class="nt">-G</span> <span class="s2">"rain"</span> <span class="nt">-p</span> <span class="nt">--</span> chapter1.md
+</code></pre></div></div>
+
+<p>Found the two commit ids? Revert them, starting with the most recent commit.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span> <span class="nt">-G</span> <span class="s2">"rain"</span> <span class="nt">--</span> chapter1.md
+
+f8829e0 Rain?
+096217b Raining <span class="k">in </span>chapter 1
+
+<span class="nv">$&gt;</span> git revert f8829e0
+<span class="nv">$&gt;</span> git revert 096217b
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ You might get a conflict if you revert in the wrong order. Just <code class="language-plaintext highlighter-rouge">revert --abort</code> and try again.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="revert-my-merged-finale-branch">Revert my merged <code class="language-plaintext highlighter-rouge">finale</code> branch</h2>
+
+<p>Unfortunately, I also merged in my <code class="language-plaintext highlighter-rouge">finale</code> branch way too early – I want to undo that.</p>
+
+<blockquote>
+  <p>🔎 Because it is a merge into <code class="language-plaintext highlighter-rouge">master</code> I consider it “released”. My publisher has probably already cloned this repo and started looking at it, proposing edits in their own branch. Therefore this branch is in use by other team members (shared) and I should <em>not</em> use <code class="language-plaintext highlighter-rouge">reset</code> to repair <code class="language-plaintext highlighter-rouge">master</code>.</p>
+</blockquote>
+
+<p>Look at the <code class="language-plaintext highlighter-rouge">graph</code> to get your bearings.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+</code></pre></div></div>
+
+<p>Create a new branch off <code class="language-plaintext highlighter-rouge">master</code> to contain this reverted changeset, call it <code class="language-plaintext highlighter-rouge">revert-the-finale</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch master
+git branch revert-the-finale
+</code></pre></div></div>
+
+<p>Determine which commit(s) id you are going to revert.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--merges</span> <span class="nt">--grep</span> <span class="s2">"finale"</span>
+</code></pre></div></div>
+
+<p>Remember, we are reverting a <code class="language-plaintext highlighter-rouge">merge</code>, which requires we pick a <code class="language-plaintext highlighter-rouge">mainline</code> to “remain on”.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># &lt;c1&gt; is to be replaced with the merge commit id you find up above...</span>
+git revert &lt;c1&gt; <span class="nt">-m</span> 1
+</code></pre></div></div>
+
+<p>To finish, view the log and the diff of the revert you just made. <code class="language-plaintext highlighter-rouge">finale.md</code> should no longer exist on your branch.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># changes in my branch</span>
+git diff master...revert-the-finale
+
+<span class="c"># new commits on my branch</span>
+git log master..
+</code></pre></div></div>
+
+<p>When you’re satisfied with the change, merge your <code class="language-plaintext highlighter-rouge">revert-the-finale</code> branch into <code class="language-plaintext highlighter-rouge">master</code>, making sure to not allow a “fast forward”. Do this locally (not via a remote).</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch master
+git merge revert-the-finale <span class="nt">--no-ff</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="cherry-picking">Cherry Picking</h2>
+
+<p>Remember that work we undid in chapter1.md, where I had been writing about the “rain”? I just decided I don’t want to throw it out entirely - I’d like to copy that work out into a new branch so I can keep working on it in isolation.</p>
+
+<p>Use <code class="language-plaintext highlighter-rouge">cherry-pick</code> to “copy” just those commits into a new branch.</p>
+
+<p>To do this, make sure you have those two commit ids handy.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>f8829e0 Rain?
+096217b Raining <span class="k">in </span>chapter 1
+</code></pre></div></div>
+
+<p>Create a new branch off <code class="language-plaintext highlighter-rouge">main</code> or <code class="language-plaintext highlighter-rouge">master</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git switch <span class="nt">-c</span> rain-changes
+</code></pre></div></div>
+
+<p>Within that branch, <code class="language-plaintext highlighter-rouge">cherry-pick</code> the two commits over – if you’re feeling bold, experiment with <code class="language-plaintext highlighter-rouge">--no-commit</code> here to “squash” the two changesets into one. Unlike <code class="language-plaintext highlighter-rouge">revert</code>, you’ll copy these in the order the commits were originally made.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git cherry-pick 096217b
+git cherry-pick f8829e0
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 Squashing would look like:</p>
+
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git cherry-pick 096217b <span class="nt">--no-commit</span>
+git cherry-pick f8829e0 <span class="nt">--no-commit</span>
+git add <span class="nb">.</span>
+git commit
+</code></pre></div>  </div>
+</blockquote>
+
+<p>View the log to see what changed:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 Cherry picking only copied the changesets from those commits, it did not move or remove the original commits from the graph.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="reset-to-squash">Reset to Squash</h2>
+
+<p><code class="language-plaintext highlighter-rouge">reset</code> is a very powerful command, it controls the “three trees”, which just means that we can use it to do a combination of:</p>
+
+<ol>
+  <li>Moving branch pointers</li>
+  <li>Cleaning up our staging area</li>
+  <li>Cleaning up our working directory</li>
+</ol>
+
+<p>Use <code class="language-plaintext highlighter-rouge">reset</code> to “squash down” the original <code class="language-plaintext highlighter-rouge">finale</code> branch.</p>
+
+<blockquote>
+  <p>🔎 You do this by finding the new commit id you want the branch to point to. Also: consider whether you’ll use <code class="language-plaintext highlighter-rouge">--hard</code> or not.</p>
+
+  <p>I suggest you create a copy of the branch, rather than modifying <code class="language-plaintext highlighter-rouge">finale</code> (so you can try out the upcoming bonus, which expects <code class="language-plaintext highlighter-rouge">finale</code> not to have been squashed).</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch finale
+git log <span class="nt">--oneline</span> <span class="nt">--all</span>
+
+git switch <span class="nt">-c</span> squashed-finale
+
+<span class="c"># find the commit id, then...</span>
+git reset 7d41853 <span class="nt">--soft</span>
+</code></pre></div></div>
+
+<p>Finally, check the <code class="language-plaintext highlighter-rouge">status</code> - you should see all the changes still sitting in your staging area. This is handy! You can now simply <code class="language-plaintext highlighter-rouge">commit</code> to effectively squash these into a new, single commit object.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+git commit <span class="nt">-m</span> <span class="s1">'Finale (Squashed)'</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 <code class="language-plaintext highlighter-rouge">git merge-base</code> can be used to determine the latest shared ancestor of two branches. In this way, we could have run <code class="language-plaintext highlighter-rouge">git merge-base master finale</code> to determine which commit <code class="language-plaintext highlighter-rouge">finale</code> branched off from. However, since <code class="language-plaintext highlighter-rouge">master</code> has since moved forward - and <code class="language-plaintext highlighter-rouge">finale</code> was actually merged (then reverted) the <code class="language-plaintext highlighter-rouge">merge-base</code> would actually be the tip of the original <code class="language-plaintext highlighter-rouge">finale</code> branch.</p>
+</blockquote>
+
+
+
+      </section>
+
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

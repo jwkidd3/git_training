@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Remotes: Dealing with Conflicts | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Remotes: Dealing with Conflicts" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="remotes-collab-3.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/remotes-collab-3.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Remotes: Dealing with Conflicts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Remotes: Dealing with Conflicts","url":"http://fundamentals.gitgood.training/labs/remotes-collab-3.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      
+<h1 id="remotes-dealing-with-conflicts">Remotes: Dealing with Conflicts</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>Practice dealing with a conflict on our pull/merge requests.</p>
+
+<p><strong>The instructor will:</strong> create an additional pull request with a similar change to the <code class="language-plaintext highlighter-rouge">readme.md</code> – and will merge it in <em>first</em>. This will merge cleanly, however, this should now put everyone else’s branches into <strong>conflict</strong>.</p>
+
+<blockquote>
+  <p>🔎 Conflicts generally occur when two branches (or diverging commits) edit the same line of the same file – git does not know which should take precedence and so it asks you, the user, to decide.</p>
+</blockquote>
+
+<p>Then <strong>students will:</strong> will fix their branch conflicts and re-push them to the remote.</p>
+
+<hr />
+
+<h2 id="1-is-the-team-project-set-up">1. Is the Team Project set up?</h2>
+
+<p>Chase the instructor to get this done</p>
+
+<ul>
+  <li>Create a branch, <code class="language-plaintext highlighter-rouge">bad-robot</code></li>
+  <li>Create a branch, <code class="language-plaintext highlighter-rouge">abe-lincoln</code></li>
+  <li>Merge <code class="language-plaintext highlighter-rouge">bad-robot</code> - all good</li>
+  <li>Merge <code class="language-plaintext highlighter-rouge">abe-lincoln</code> - conflict - demo resolving</li>
+</ul>
+
+<hr />
+
+<h2 id="2-resolve-the-conflict">2. Resolve the conflict</h2>
+
+<p>This is best done locally so that you can verify that your resolution works within your test suite / environment / etc.</p>
+
+<p>On your local, <strong>get your feature branch up to date</strong> with the target branch (<code class="language-plaintext highlighter-rouge">main</code>), this should cause the conflict locally.</p>
+
+<blockquote>
+  <p>⚠️ <strong>Remember</strong> your feature branch name is likely different than mine</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch add-my-name-to-the-readme
+git pull origin main
+
+<span class="c"># or</span>
+<span class="c"># git fetch origin</span>
+<span class="c"># git merge origin/main</span>
+<span class="c">#</span>
+<span class="c"># or</span>
+<span class="c"># git switch main</span>
+<span class="c"># git pull</span>
+<span class="c"># git switch add-my-name-to-the-readme</span>
+<span class="c"># git merge main</span>
+</code></pre></div></div>
+
+<p>You should not be in a conflict mode, check which file is in conflict:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+</code></pre></div></div>
+
+<p>Fix the file, stage and commit the change (completing the merge), then push the update:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># edit the file to fix it or use a mergetool</span>
+git add readme.md
+git merge <span class="nt">--continue</span>
+<span class="c"># or: git commit</span>
+git push
+</code></pre></div></div>
+
+<p><strong>Verify that your pull/merge request is no longer in conflict</strong>.</p>
+
+
+      </section>
+   
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

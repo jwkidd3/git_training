@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Remotes: Collaborating as a Team | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Remotes: Collaborating as a Team" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="remotes-collab-2.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/remotes-collab-2.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Remotes: Collaborating as a Team" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Remotes: Collaborating as a Team","url":"http://fundamentals.gitgood.training/labs/remotes-collab-2.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      
+<h1 id="remotes-collaborating-as-a-team">Remotes: Collaborating as a Team</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>We’re going to all work on one file together - we will do this simultaneously (after the instructor prepares the file) and then see what happens with our pull/merge requests.</p>
+
+<p><strong>The instructor will:</strong> create a <code class="language-plaintext highlighter-rouge">readme.md</code> file with a list of our names. The instructor will need to do this first.</p>
+
+<p>Then <strong>students will:</strong> submit a pull/merge request to add their name to the <code class="language-plaintext highlighter-rouge">readme.md</code> file.</p>
+
+<hr />
+
+<h2 id="1-is-the-team-project-set-up">1. Is the Team Project set up?</h2>
+
+<p>Chase the instructor to get this done</p>
+
+<ul>
+  <li>Create a <code class="language-plaintext highlighter-rouge">readme.md</code> (or update it)</li>
+  <li>Add the right content</li>
+</ul>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Team Page</span>
+<span class="p">
+*</span> <span class="p">[</span><span class="nv">Ryan Morris</span><span class="p">](</span><span class="sx">./ryan-morris.md</span><span class="p">)</span>
+<span class="p">*</span> &lt;-- Next person here
+<span class="gt">
+&gt; Team as of 2021</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="2-get-up-to-date">2. Get up to date</h2>
+
+<p>Your task is to add your name to the <code class="language-plaintext highlighter-rouge">readme.md</code> file and submit that as a pull/merge request targeting the <code class="language-plaintext highlighter-rouge">main</code> branch.</p>
+
+<p>In order to contribute to this file, you’ll need to start from an up-to-date <code class="language-plaintext highlighter-rouge">main</code> branch.</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">pull</code> to get your <code class="language-plaintext highlighter-rouge">main</code> branch up to date</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git pull
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-do-the-work-in-a-new-branch">3. Do the work in a new branch</h2>
+
+<p><strong>Start a new branch</strong> for the work you’re about to do:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch <span class="nt">-c</span> add-my-name-to-readme
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ <strong>Remember</strong> to choose a unique branch name!</p>
+</blockquote>
+
+<p><strong>Do the work</strong> then <strong>push your branch up</strong>. Finally, <strong>open a new pull request</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># edit the readme</span>
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Added my name to the profile"</span>
+git push origin HEAD
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ <strong>Need help</strong> with the edit are you making? If your name is “Jim Kirk”, you’d modify the <code class="language-plaintext highlighter-rouge">readme.md</code> to be something like this:</p>
+
+  <div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Team Page</span>
+<span class="p">
+*</span> <span class="p">[</span><span class="nv">Ryan Morris</span><span class="p">](</span><span class="sx">./ryan-morris.md</span><span class="p">)</span>
+<span class="p">*</span> <span class="p">[</span><span class="nv">Jim Kirk</span><span class="p">](</span><span class="sx">./jim-kirk.md</span><span class="p">)</span>
+<span class="p">*</span> &lt;-- Next person here
+<span class="gt">
+&gt; Team as of 2021</span>
+</code></pre></div>  </div>
+  <blockquote>
+
+  </blockquote>
+</blockquote>
+
+<p>Once your PR is open, you’re all set.</p>
+
+
+
+      </section>
+
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Conflicts | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Conflicts" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="conflicts.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/conflicts.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Conflicts" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Conflicts","url":"http://fundamentals.gitgood.training/labs/conflicts.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      
+<h1 id="conflicts">Conflicts</h1>
+
+<h2 id="overview">Overview:</h2>
+
+<p>Using the same book project from your previous exercise, <code class="language-plaintext highlighter-rouge">my-book</code>, you’re going to cause a conflict so you can practice resolving conflicts.</p>
+
+<hr />
+
+<h2 id="1-causing-a-conflict">1. Causing a conflict</h2>
+
+<p>Conflicts occur when two, diverged branches change the same line of the same file (and <code class="language-plaintext highlighter-rouge">git</code> fails to determine which is the appropriate change to keep).</p>
+
+<blockquote>
+  <p>🔎 Git is typically fairly pretty good about figuring out how changes should combine or replace one another when in conflict. When it can’t, the <code class="language-plaintext highlighter-rouge">merge</code> will stop mid-way (before the merge <code class="language-plaintext highlighter-rouge">commit</code> is made) and you’ll be asked to select the correct version of any conflicting changes.</p>
+</blockquote>
+
+<p><strong>Create two new branches from <code class="language-plaintext highlighter-rouge">main</code></strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch red-chapter
+git branch blue-chapter
+</code></pre></div></div>
+
+<p>On the <code class="language-plaintext highlighter-rouge">red-chapter</code> branch, edit the title of <code class="language-plaintext highlighter-rouge">chapter1.md</code> so it has the word “red” in the title:</p>
+
+<p><em>example <code class="language-plaintext highlighter-rouge">chapter1.md</code></em></p>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Chapter 1 - The Awesome Red Chapter!</span>
+
+...
+</code></pre></div></div>
+
+<p><strong>Stage and commit</strong> that change on the <code class="language-plaintext highlighter-rouge">red-chapter</code> branch.</p>
+
+<p>Now, on the <code class="language-plaintext highlighter-rouge">blue-chapter</code> branch, <strong>edit the title of <code class="language-plaintext highlighter-rouge">chapter1.md</code></strong> so it has the word “blue” in the title.</p>
+
+<blockquote>
+  <p>⚠️ This means you’ll switch to <code class="language-plaintext highlighter-rouge">blue-chapter</code>, edit the file, stage and then commit the change.</p>
+</blockquote>
+
+<p><em>example <code class="language-plaintext highlighter-rouge">chapter1.md</code></em></p>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Chapter 1 - The Moody Blue Chapter...</span>
+
+...
+</code></pre></div></div>
+
+<p>When done, you should have two branches, each with a change to <code class="language-plaintext highlighter-rouge">chapter1.md</code>. Git doesn’t know that a conflict is brewing.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+<span class="k">*</span> 014146d <span class="o">(</span>blue-chapter<span class="o">)</span> Blue Chapter Work
+| <span class="k">*</span> 743a82a <span class="o">(</span>red-chapter<span class="o">)</span> Red Chapter Work
+|/  
+<span class="k">*</span> 3c912f8 <span class="o">(</span>HEAD -&gt; main<span class="o">)</span> Some Old Message
+...
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="2-merge-into-main">2. Merge into <code class="language-plaintext highlighter-rouge">main</code></h2>
+
+<p>Back on <code class="language-plaintext highlighter-rouge">main</code>, <strong>merge <code class="language-plaintext highlighter-rouge">blue-chapter</code> into <code class="language-plaintext highlighter-rouge">main</code></strong>. This should merge cleanly.</p>
+
+<blockquote>
+  <p>🔎 It will almost definitely perform a <code class="language-plaintext highlighter-rouge">fast-forward</code> commit. Fast-forwards will never cause a conflict because they are the (default merge strategy) result of two branches that have not diverged being merged together.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git merge blue-chapter
+</code></pre></div></div>
+
+<p>Then <strong>merge <code class="language-plaintext highlighter-rouge">red-chapter</code> into <code class="language-plaintext highlighter-rouge">main</code></strong>, <em>this should cause a conflict</em>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git merge red-chapter
+
+Auto-merging readme.md
+CONFLICT <span class="o">(</span>content<span class="o">)</span>: Merge conflict <span class="k">in </span>chapter1.md
+Automatic merge failed<span class="p">;</span> fix conflicts and <span class="k">then </span>commit the result.
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-abort-the-merge-in-progress">3. Abort the merge in progress</h2>
+
+<p>A very common best practice is to avoid making changes <em>directly</em> on the mainline (<code class="language-plaintext highlighter-rouge">main</code>, <code class="language-plaintext highlighter-rouge">master</code> and any special shared branch, ex: <code class="language-plaintext highlighter-rouge">staging</code>, <code class="language-plaintext highlighter-rouge">qa</code>, <code class="language-plaintext highlighter-rouge">integration</code>, <code class="language-plaintext highlighter-rouge">develop</code>, etc…). As a team we want our mainline to be the latest stable, reviewed and tested code – if I resolve this conflict <em>while on <code class="language-plaintext highlighter-rouge">main</code></em> then I am introducing <em>new changes</em> that have <em>not been reviewed</em> by my team and this could result in a regression or new bug.</p>
+
+<p>So let’s <strong>abort the merge</strong> and then <strong>resolve the conflict on the feature branch</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># First abort...</span>
+git merge <span class="nt">--abort</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ <strong>Warning</strong>: Don’t use <code class="language-plaintext highlighter-rouge">git merge --quit</code> here. It’s safe to use, but it will leave all the pending changes from the merge in your working directory. While <code class="language-plaintext highlighter-rouge">git merge --abort</code> will clean everything up.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Then head to red-chapter</span>
+git switch red-chapter
+
+<span class="c"># Merge in changes from main</span>
+git merge main
+</code></pre></div></div>
+
+<p><em>This should recreate the conflict.</em></p>
+
+<blockquote>
+  <p>🔎 Merging in <code class="language-plaintext highlighter-rouge">main</code> is synchronizing our feature branch, <code class="language-plaintext highlighter-rouge">red-chapter</code>, with <code class="language-plaintext highlighter-rouge">main</code>. We are “getting up to date” with all the changes that exist in <code class="language-plaintext highlighter-rouge">main</code>.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="4-resolve-the-conflict-take-2">4. Resolve the conflict, take #2</h2>
+
+<p><code class="language-plaintext highlighter-rouge">git status</code> will tell us which files are in conflict and need manual fixing:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status
+
+On branch red-chapter
+You have unmerged paths.
+  <span class="o">(</span>fix conflicts and run <span class="s2">"git commit"</span><span class="o">)</span>
+  <span class="o">(</span>use <span class="s2">"git merge --abort"</span> to abort the merge<span class="o">)</span>
+
+Unmerged paths:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to mark resolution<span class="o">)</span>
+	both modified:   chapter1.md
+
+no changes added to commit <span class="o">(</span>use <span class="s2">"git add"</span> and/or <span class="s2">"git commit -a"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p><strong>Fix the conflict</strong> by editing the file in conflict, <code class="language-plaintext highlighter-rouge">chapter1.md</code>.</p>
+
+<p>Don’t forget to clean up all the merge conflict “markers”:</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<span class="gu"># Chapter 1 - The Red Chapter
+=======
+</span><span class="gh"># Chapter 1 - The Blue Chapter</span>
+<span class="gt">&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>You are making your file the way it should be <em>as though the merge was a success</em>. Your file should look something like this when you’re done.</p>
+
+  <div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Chapter 1 - The Purple Chapter</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<p>When you’re done cleaning up the conflicted file, <strong>stage the change and complete the merge</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add chapter1.md
+git merge <span class="nt">--continue</span>
+
+<span class="c"># if "merge --continue" is not available in your version of git, use:</span>
+<span class="c"># git commit</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">git status</code> should show all clean.</p>
+
+<p>Can you tell what file differences exist between <code class="language-plaintext highlighter-rouge">main</code> and <code class="language-plaintext highlighter-rouge">red-chapter</code>?</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># changes that exist only in red-chapter, relative to main</span>
+<span class="c"># you could also write this: git diff main...red-chapter</span>
+git diff main...
+
+<span class="c"># changes that exist across both branches</span>
+<span class="c"># you could also write this: git diff main red-chapter</span>
+git diff main..
+</code></pre></div></div>
+
+<p>What kind of merge will happen if you were to merge <code class="language-plaintext highlighter-rouge">red-chapter</code> into <code class="language-plaintext highlighter-rouge">main</code> now?</p>
+
+<hr />
+
+<h1 id="5-release-red-chapter">5. Release red-chapter</h1>
+
+<p>Now you can <strong><code class="language-plaintext highlighter-rouge">switch</code> to main and merge in <code class="language-plaintext highlighter-rouge">red-chapter</code></strong>. It should merge cleanly.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git merge red-chapter
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="6-undo-the-merge">6. Undo the merge</h1>
+
+<p>Use <code class="language-plaintext highlighter-rouge">reset</code> to <em>undo</em> the merge of <code class="language-plaintext highlighter-rouge">red-chapter</code> into <code class="language-plaintext highlighter-rouge">main</code>. Take note of what <em>kind of merge</em> it performed and, by viewing the log, determine what the correct <code class="language-plaintext highlighter-rouge">commit</code> is to <em>go back to</em>.</p>
+
+<p>Check to see if you’re correct by inspecting the <code class="language-plaintext highlighter-rouge">ORIG_HEAD</code> commit.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git show ORIG_HEAD
+</code></pre></div></div>
+
+<p>Undo the merge using <code class="language-plaintext highlighter-rouge">ORIG_HEAD</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset ORIG_HEAD <span class="nt">--hard</span>
+</code></pre></div></div>
+
+<p>Verify that <code class="language-plaintext highlighter-rouge">red-chapter</code> is no longer merged into <code class="language-plaintext highlighter-rouge">main</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git branch <span class="nt">--no-merged</span>
+<span class="c"># you should see red-chapter in the list</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-1-undo-the-conflict-resolution">Bonus 1: Undo the Conflict Resolution</h2>
+
+<p>In the next bonus you’re going to re-try resolving the conflict, but this time using a merge tool. To be able to do this you’ll need to <em>undo</em> the merge you made previously that contains the conflict resolution.</p>
+
+<p>Your graph probably looks like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+<span class="k">*</span>   b291550 <span class="o">(</span>red-chapter<span class="o">)</span> Merge branch <span class="s1">'main'</span> into red-chapter
+|<span class="se">\ </span> 
+| <span class="k">*</span> 014146d <span class="o">(</span>HEAD -&gt; main, blue-chapter<span class="o">)</span> Blue Chapter Work
+<span class="k">*</span> | 743a82a Red Chapter Work
+|/  
+<span class="k">*</span> 3c912f8 Some Old Message
+...
+</code></pre></div></div>
+
+<p>Can you see how to <code class="language-plaintext highlighter-rouge">reset</code> the <code class="language-plaintext highlighter-rouge">red-chapter</code> branch to the right spot in order to <em>undo</em> synchronizing it with <code class="language-plaintext highlighter-rouge">main</code>?</p>
+
+<details>
+
+<summary>The solution...</summary>
+
+<pre class="highlight">
+git switch red-chapter
+
+# NOTE: Your commit id will be different...
+git reset 743a82a --hard
+</pre>
+
+</details>
+
+<p><br /></p>
+
+<p>After the solution… this should be the end result:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+<span class="k">*</span> 014146d <span class="o">(</span>main, blue-chapter<span class="o">)</span> Blue Chapter Work
+| <span class="k">*</span> 743a82a <span class="o">(</span>HEAD -&gt; red-chapter<span class="o">)</span> Red Chapter Work
+|/  
+<span class="k">*</span> 3c912f8 Some Old Message
+...
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-2-choose-or-set-up-a-merge-tool">Bonus 2: Choose or Set Up A Merge Tool</h2>
+
+<p>Dealing with a conflict by hand is tedious and error-prone. It’s a good idea to set up a “merge tool” so that git knows how to open your favorite conflict resolution tool.</p>
+
+<p>See what tools git can be configured to use with: <code class="language-plaintext highlighter-rouge">mergetool --tool-help</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git mergetool <span class="nt">--tool-help</span>
+</code></pre></div></div>
+
+<p>You will see a long list of possible tools, some that you already have installed and others that git knows about but require installation.</p>
+
+<p><strong>For example</strong> If you wanted to use something like “Beyond Compare 4”, it <em>might</em> be installed and available as <code class="language-plaintext highlighter-rouge">bc4</code>. You could use this next time you’re in conflict:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git mergetool <span class="nt">-t</span> bc4
+</code></pre></div></div>
+
+<p>You can also configure git to <em>always use</em> this tool, then you can simply run <code class="language-plaintext highlighter-rouge">git mergetool</code> and it will default to opening your fav.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> merge.tool bc4
+
+<span class="c"># after that you can simply run:</span>
+<span class="c"># git mergetool</span>
+</code></pre></div></div>
+
+<p>Whatever tool you use, you need to make sure it is installed and ready for git to use.</p>
+
+<p>Other sample tool configs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># VS Code</span>
+<span class="c">#</span>
+<span class="c"># you'll need to enable it for the cli (https://code.visualstudio.com/docs/setup/setup-overview)</span>
+<span class="c"># then config it, for git to use it</span>
+git config <span class="nt">--global</span> merge.tool vscode
+git config <span class="nt">--global</span> mergetool.vscode.cmd <span class="s1">'code --new-window --wait $MERGED'</span>
+
+<span class="c"># SublimeMerge</span>
+<span class="c">#</span>
+<span class="c"># you'll need to make "smerge" available in the cli</span>
+<span class="nb">ln</span> <span class="nt">-sv</span> <span class="s2">"/Applications/Sublime Merge.app/Contents/SharedSupport/bin/smerge"</span> /usr/local/bin/smerge
+<span class="c"># then config it, for git to use it</span>
+git config <span class="nt">--global</span> mergetool.smerge.cmd <span class="s1">'smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"'</span>
+git config <span class="nt">--global</span> mergetool.smerge.trustExitCode <span class="nb">true</span>
+
+<span class="c"># For others - google it: "git mergetool &lt;&gt;"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-3-try-the-mergetool">Bonus 3: Try the mergetool</h2>
+
+<p>When you have one configured, try resolving the conflict again and use the <code class="language-plaintext highlighter-rouge">mergetool</code> – you’ll need to have completed <strong>Bonus #1</strong> in order to re-attempt the resolution.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># be on the red-chapter branch</span>
+git switch red-chapter
+
+<span class="c"># sync with main</span>
+git merge main
+
+<span class="c"># you should get the same conflict!</span>
+
+<span class="c"># use the mergetool to address it...</span>
+git mergetool
+</code></pre></div></div>
+
+<p>If you find that it generates unwanted <code class="language-plaintext highlighter-rouge">.orig</code> files, you can configure it to clean those up:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> mergetool.keepBackup <span class="nb">false</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-4-brute-force-efforts">Bonus 4: Brute force efforts</h2>
+
+<p>It’s possible to ask git to <em>always</em> choose one version over another if a conflict occurs during a merge. This is considered a bit of a “brute force” approach since you may introduce errors by not selecting the right version by hand – but this works well if you are confident one version is defintely the right choice in advance.</p>
+
+<p><strong>Undo the merge</strong> again and then <strong>re-do</strong> it, but this time you’ll include a “conflict strategy” to indicate you want to always use the <code class="language-plaintext highlighter-rouge">red-chapter</code> version:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># be on the red-chapter branch</span>
+git switch red-chapter
+
+<span class="c"># undo the merge (which included the conflict resolution)</span>
+git reset ORIG_HEAD <span class="nt">--hard</span>
+
+<span class="c"># try the merge again - but tell git to opt for red-chapter's version of things where there is a conflict</span>
+git merge main <span class="nt">-X</span> ours
+</code></pre></div></div>
+
+<hr />
+
+<p><em>All done</em></p>
+
+
+      </section>
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

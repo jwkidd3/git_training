@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>The Extra Bits | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="The Extra Bits" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="stash-and-ignore.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/stash-and-ignore.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="The Extra Bits" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"The Extra Bits","url":"http://fundamentals.gitgood.training/labs/stash-and-ignore.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      
+<h1 id="the-extra-bits">The Extra Bits</h1>
+<h2 id="stash-ignore-hooks-etc">Stash, Ignore, Hooks, etc…</h2>
+
+<h2 id="overview">Overview:</h2>
+
+<p>Continue from the same <code class="language-plaintext highlighter-rouge">my-book</code> project. You’ll be setting up an <em>ignore file</em> for the project, <em>renaming some files</em> and experiencing where the <em>stash</em> can come in handy.</p>
+
+<p>Starting from the <code class="language-plaintext highlighter-rouge">main</code> branch…</p>
+
+<hr />
+
+<h1 id="a-project-ignores">A Project Ignores</h1>
+
+<p>You decide to set up a special <em>build process</em> for your book to help compile and run it through some spellcheckers, then generate a PDF preview. Let’s not worry about how that is implemented…</p>
+
+<p>As part of the build process you use some environment variables to send the PDF preview to a secure folder online - a token is needed.</p>
+
+<p><strong>Create an <code class="language-plaintext highlighter-rouge">.env</code> file</strong> - this is where you’ll ultimately save the secret token for your build pipeline.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch</span> .env
+<span class="nb">echo</span> <span class="s2">"TOKEN=abcd"</span> <span class="o">&gt;&gt;</span> .env
+</code></pre></div></div>
+
+<p>We don’t want this secret info to ever get accidentally added to the project; <strong>add a <code class="language-plaintext highlighter-rouge">.gitignore</code> to prevent it from being included.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch</span> .gitignore
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">.gitignore</code> contents:</p>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.env
+</code></pre></div></div>
+
+<p>What shows when you <strong>check your <code class="language-plaintext highlighter-rouge">git status</code></strong>?</p>
+
+<p>It should only be listing the <code class="language-plaintext highlighter-rouge">.gitignore</code> file and not the <code class="language-plaintext highlighter-rouge">.env</code> file.</p>
+
+<blockquote>
+  <p>🔎 Typically a project will have at least one <code class="language-plaintext highlighter-rouge">.gitignore</code> file at the top-level directory (the root). However, git supports a <code class="language-plaintext highlighter-rouge">.gitignore</code> file at any directory-level within the project - these nested ignores will only affect the directory they reside in and child directories beneath them.</p>
+</blockquote>
+
+<p><strong>Create a branch from <code class="language-plaintext highlighter-rouge">main</code> to <code class="language-plaintext highlighter-rouge">stage</code> and <code class="language-plaintext highlighter-rouge">commit</code> this change.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch <span class="nt">-c</span> ignore-env-file
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s1">'Ignoring the new .env file'</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">git status</code> should show no pending changes.</p>
+
+<hr />
+
+<h1 id="renaming-files">Renaming Files</h1>
+
+<p>You get a request from the publisher to rename the files - they aren’t appearing in order (easily) when listing the files.</p>
+
+<p>Starting a new branch from <code class="language-plaintext highlighter-rouge">main</code>, rename the files as follows:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">introduction.md</code> -&gt; <code class="language-plaintext highlighter-rouge">00-introduction.md</code></li>
+  <li><code class="language-plaintext highlighter-rouge">chapter1.md</code> -&gt; <code class="language-plaintext highlighter-rouge">01-chapter.md</code></li>
+  <li><code class="language-plaintext highlighter-rouge">chapter2.md</code> -&gt; <code class="language-plaintext highlighter-rouge">02-chapter.md</code></li>
+</ul>
+
+<blockquote>
+  <p>⚠️ <em>Careful…</em> once you switch back to <code class="language-plaintext highlighter-rouge">main</code> you’ll notice your previously ignored <code class="language-plaintext highlighter-rouge">.env</code> file is now showing up when you <code class="language-plaintext highlighter-rouge">git status</code>. Do you know why?</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git switch <span class="nt">-c</span> rename-chapter-numbers
+
+<span class="c"># you can use "git mv" or just "mv" then manually "add" the rename</span>
+git <span class="nb">mv </span>introduction.md 00-introduction.md
+git <span class="nb">mv </span>chapter1.md 01-chapter.md
+git <span class="nb">mv </span>chapter2.md 02-chapter.md
+
+git commit <span class="nt">-m</span> <span class="s1">'Renamed all chapters to be prefixed by their number'</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ Forgot to create a new branch (committed on <code class="language-plaintext highlighter-rouge">main</code>)? No problem! <code class="language-plaintext highlighter-rouge">git reset HEAD^</code> to undo your last commit, then switch over to a new branch. You’ll need to re-stage those changes, however.</p>
+</blockquote>
+
+<p>Nice! <code class="language-plaintext highlighter-rouge">git status</code> should show only the <code class="language-plaintext highlighter-rouge">.env</code> file as pending…</p>
+
+<hr />
+
+<h1 id="an-edit-to-the-intro">An Edit to the Intro</h1>
+
+<p>Let’s pretend we need to make an urgent edit to the <code class="language-plaintext highlighter-rouge">00-introduction.md</code> file. However, we’re going to <em>do it in a rush</em> and start making the edits while still on our <code class="language-plaintext highlighter-rouge">rename-chapter-numbers</code> branch.</p>
+
+<p><strong><em>Do not switch to <code class="language-plaintext highlighter-rouge">main</code></em></strong> (simulating a mistake here)</p>
+
+<p><strong>Edit the contents of <code class="language-plaintext highlighter-rouge">00-introduction.md</code> in some way</strong> - maybe change the title or add a few new lines of text at the bottom.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># edit the `00-introduction.md` file in any way</span>
+<span class="c"># this is me editing it via the terminal</span>
+<span class="nb">echo</span> <span class="s2">"So long and thanks for all the fish!"</span> <span class="o">&gt;&gt;</span> 00-introduction.md
+</code></pre></div></div>
+
+<p><strong><em>But wait!</em></strong> you’re mixing work in with your renames, which aren’t necessarily ready to be released. In other words: You didn’t start a new branch from <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+<p><strong>Switch to <code class="language-plaintext highlighter-rouge">main</code></strong> and start a new branch to contain this intro edit.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git switch main
+error: Your <span class="nb">local </span>changes to the following files would be overwritten by checkout:
+	00-introduction.md
+Please commit your changes or stash them before you switch branches.
+Aborting
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">switch</code> aborted… we’re prevented from switching because our pending changes won’t carry over cleanly to the state of the files in <code class="language-plaintext highlighter-rouge">main</code>. Stash can help us get around this.</p>
+
+<p><strong>Use the <code class="language-plaintext highlighter-rouge">stash</code> to carry your work in progress to a new branch you start from <code class="language-plaintext highlighter-rouge">main</code>.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># save work in progress</span>
+<span class="c"># it will ignore "untracked" files by default</span>
+git stash
+
+<span class="c"># you could also have done:</span>
+<span class="c"># git stash -- 00-introduction.md</span>
+<span class="c"># or</span>
+<span class="c"># git add 00-introduction.md</span>
+<span class="c"># git stash --staged </span>
+
+<span class="c"># now switch and create your new branch</span>
+git switch main
+git switch <span class="nt">-c</span> special-intro-edit
+
+<span class="c"># take the last item out from the stash</span>
+git stash pop
+</code></pre></div></div>
+
+<p>There shouldn’t be any conflicts and <code class="language-plaintext highlighter-rouge">stash pop</code> should have also applied the changes cleanly, despite the original edit being on the <em>renamed version</em> of that file. (FYI: Older of versions may fail to pull this off cleanly, and you may get a conflict).</p>
+
+<p>Now <strong>stage &amp; commit your edit to the intro</strong>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add 00-introduction.md
+git commit <span class="nt">-m</span> <span class="s2">"Edited the intro with a special note from the dolphins"</span>
+</code></pre></div></div>
+
+<hr />
+<h1 id="release--tag">Release &amp; Tag</h1>
+
+<p>Let’s release the work we’ve done.</p>
+
+<p>Switch back to <code class="language-plaintext highlighter-rouge">main</code> and <strong>release the work from the 3 branches</strong>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ignore-env-file</code></li>
+  <li><code class="language-plaintext highlighter-rouge">rename-chapter-numbers</code></li>
+  <li><code class="language-plaintext highlighter-rouge">special-intro-edit</code></li>
+</ul>
+
+<p>Order should not matter ^</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git merge ignore-env-file
+git merge rename-chapter-numbers
+git merge special-intro-edit
+
+<span class="c"># optional, cleanup...</span>
+git branch <span class="nt">-d</span> ignore-env-file rename-chapter-numbers special-intro-edit
+</code></pre></div></div>
+
+<p>Tag this point in history to mark the official release, <code class="language-plaintext highlighter-rouge">v1.0</code> of the book, using an annotated tag.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag <span class="nt">-a</span> v1.0
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="bonus-1">Bonus #1</h1>
+
+<p>Use <code class="language-plaintext highlighter-rouge">log</code> to track the history of all changes to the renamed <code class="language-plaintext highlighter-rouge">00-introduction.md</code> (renamed) file. How about the original file, can you track the history of changes to <code class="language-plaintext highlighter-rouge">introduction.md</code>, too?</p>
+
+<details>
+
+<summary>The solution...</summary>
+
+<pre class="highlight">
+# unfortunately these do not work...
+#
+# 1) only sees changes to that newly renamed version
+git log --oneline -- 00-introduction.md
+# 2) doesn't even see this file any more...
+git log --oneline -- chapter1.md
+
+...
+
+# the solutions:
+#
+# 1) show commits from here back, that touch this file, following through renames
+git log --oneline --follow -- 00-introduction.md
+
+# 2) show any commit that touched introduction.md, following renames
+git log --oneline --follow --all -- introduction.md
+</pre>
+
+</details>
+
+<p><br /></p>
+
+<hr />
+
+<h1 id="bonus-2">Bonus #2</h1>
+
+<p>Can you get a new, empty folder, <code class="language-plaintext highlighter-rouge">tmp/</code> to be trackable in your project but have all contents remain ignored.</p>
+
+<details>
+
+<summary>The solution...</summary>
+
+<div>
+The trick is to edit your `.gitignore` file to ignore `tmp/` but allow at least one file to remain, typically `!tmp/.gitkeep`. You will also need to add that `.gitkeep` file to the project, too. 
+</div>
+
+</details>
+
+
+      </section>
+
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

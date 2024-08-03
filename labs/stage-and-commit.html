@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Stage &amp; Commit Flow | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Stage &amp; Commit Flow" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="stage-and-commit.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/stage-and-commit.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Stage &amp; Commit Flow" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Stage &amp; Commit Flow","url":"http://fundamentals.gitgood.training/labs/stage-and-commit.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      <h1 id="stage--commit-flow">Stage &amp; Commit Flow</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>You’re going to create a simple <em>profile project</em> to practice the basic <code class="language-plaintext highlighter-rouge">git</code> commands and the “stage &amp; commit” workflow.</p>
+
+<hr />
+
+<h2 id="1-initialize-a-new-repository">1. Initialize a new repository</h2>
+
+<p><strong>Use <code class="language-plaintext highlighter-rouge">init</code> to start a new git project called <code class="language-plaintext highlighter-rouge">my-profile</code></strong>.</p>
+
+<blockquote>
+  <p>🔎 Without any arguments, <code class="language-plaintext highlighter-rouge">git init</code> will initialize a repository in your current directory.</p>
+</blockquote>
+
+<p>This directory is going to be your <em>root directory</em>; all files and sub-directories within this top-level directory can be <em>tracked</em> as part of your project.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># make a directory to contain your project - in any way you like</span>
+<span class="nb">mkdir </span>my-profile
+
+<span class="c"># initialize a repository inside that directory</span>
+<span class="nb">cd </span>my-profile
+git init ./
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 Alternatively you could have used <code class="language-plaintext highlighter-rouge">git init my-profile</code> to automatically create the folder and initialize a git project within it.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="2-the-first-commit">2. The first commit</h2>
+
+<p>Your project doesn’t have a history yet. If you run <code class="language-plaintext highlighter-rouge">git log</code> you’ll get an error message. Let’s get at least one commit in the project.</p>
+
+<p><strong>Create an empty commit</strong> as your first commit.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># strange error message when there is no history..</span>
+git log
+
+<span class="c"># commit with an empty changeset (you'll still need a message)</span>
+git commit <span class="nt">--allow-empty</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 You can also <code class="language-plaintext highlighter-rouge">--allow-empty-message</code> if you want to commit w/out providing a message, however this is not a good habit since messages help to describe the change that a commit contains.</p>
+</blockquote>
+
+<p><strong>Check the log</strong>, you should see the one commit you just created.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log
+
+commit 0584d0fce14736e93d736c106c31106f6f4bc138 <span class="o">(</span>HEAD -&gt; main<span class="o">)</span>
+Author: Ryan Morris &lt;<a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="b0ddc29edddfc2c2d9c3f0d7ddd1d9dc9ed3dfdd">[email&#160;protected]</a>&gt;
+Date:   Tue Aug 17 11:25:26 2021 <span class="nt">-0700</span>
+
+    My First Commit
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 It’s not necessary to start a project with an empty commit but it can be a handy way to begin a project that has no initial files.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="3-create-a-profile-file">3. Create a Profile file</h2>
+
+<p><strong>Create a new, empy file</strong>, <code class="language-plaintext highlighter-rouge">profile.md</code>:</p>
+
+<blockquote>
+  <p>❓ You can create this as any file extension you wish, <code class="language-plaintext highlighter-rouge">txt</code>, <code class="language-plaintext highlighter-rouge">md</code> (markdown), etc.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># this creates a new file in the command line</span>
+<span class="c"># it is NOT a git command</span>
+<span class="nb">touch </span>profile.md
+</code></pre></div></div>
+
+<p><strong>Check the <code class="language-plaintext highlighter-rouge">status</code></strong>. <code class="language-plaintext highlighter-rouge">git</code> notices the new file, which will be <code class="language-plaintext highlighter-rouge">untracked</code> to start.</p>
+
+<blockquote>
+  <p>🔎 Untracked files are not managed by git; <code class="language-plaintext highlighter-rouge">git</code> will avoid affecting them except for a very limited set of commands.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status
+
+On branch main
+
+Untracked files:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to include <span class="k">in </span>what will be committed<span class="o">)</span>
+	profile.md
+</code></pre></div></div>
+
+<p><strong>Stage the change</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add profile.md
+</code></pre></div></div>
+
+<p>Again, <strong>check the status</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status
+
+On branch main
+Changes to be committed:
+  <span class="o">(</span>use <span class="s2">"git restore --staged &lt;file&gt;..."</span> to unstage<span class="o">)</span>
+	new file:   profile.md
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 The file is now “staged” and is in the list of files <em>that will be committed</em>.</p>
+</blockquote>
+
+<p>Now, <strong>commit the change</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit
+</code></pre></div></div>
+
+<p>Finally, <strong>Check the status</strong> to confirm you don’t have any pending changes.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status
+
+On branch main
+nothing to commit, working tree clean
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 This is telling you you’re on a branch called <code class="language-plaintext highlighter-rouge">main</code> (our default branch), and there are no pending changes (no “work in progress”). Your “working tree” is the directory you’re working in.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="4-add-a-title">4. Add a Title</h2>
+
+<p><strong>Update your profile file</strong> so it has your name as a “title” within the contents.</p>
+
+<p><em>example <code class="language-plaintext highlighter-rouge">profile.md</code> in markdown format</em>:</p>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Ryan Morris</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>❓ Use any editor you like - such as your IDE, or a simple text editor. You are <em>not</em> using git’s <code class="language-plaintext highlighter-rouge">core.editor</code> for doing work… that’s just for commit message collection.</p>
+</blockquote>
+
+<p><strong>Check your status</strong>, you should see some pending changes not yet staged.</p>
+
+<p>Then <strong>stage your changes</strong>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add profile.md
+</code></pre></div></div>
+
+<p><strong>Before you commit</strong> make another edit to the file, such as adding a list of favorite foods:</p>
+
+<p><em>example <code class="language-plaintext highlighter-rouge">profile.md</code> in markdown format</em>:</p>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># Ryan Morris</span>
+
+Fav Foods:
+<span class="p">*</span> Pizza
+<span class="p">*</span> Murtabak
+</code></pre></div></div>
+
+<p><strong>Check the status</strong> again:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status
+
+On branch main
+Changes to be committed:
+  <span class="o">(</span>use <span class="s2">"git restore --staged &lt;file&gt;..."</span> to unstage<span class="o">)</span>
+	new file:   profile.md
+
+Changes not staged <span class="k">for </span>commit:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to update what will be committed<span class="o">)</span>
+  <span class="o">(</span>use <span class="s2">"git restore &lt;file&gt;..."</span> to discard changes <span class="k">in </span>working directory<span class="o">)</span>
+	modified:   profile.md
+</code></pre></div></div>
+
+<p>You should see that you have changes listed in <em>two areas</em>, your <code class="language-plaintext highlighter-rouge">working directory</code> and the <code class="language-plaintext highlighter-rouge">staging area</code>.</p>
+
+<blockquote>
+  <p>❓ If you were to commit now, only the staged changes would be put into the project history as a new commit.</p>
+</blockquote>
+
+<p>Before you commit, <strong>view the pending changes</strong> in your working directory.</p>
+
+<blockquote>
+  <p>❓ Changes in your working directory are the edits you have <em>not yet staged</em>.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git diff
+
+diff <span class="nt">--git</span> a/profile.md b/profile.md
+index e0241d6..417d487 100644
+<span class="nt">---</span> a/profile.md
++++ b/profile.md
+@@ <span class="nt">-1</span> +1,5 @@
+-# Ryan Morris
+<span class="se">\ </span>No newline at end of file
++# Ryan Morris
++
++Fav Foods:
++<span class="k">*</span> Pizza
++<span class="k">*</span> Murtabak
+<span class="se">\ </span>No newline at end of file
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 <code class="language-plaintext highlighter-rouge">git diff</code> will show us work in progress that is in work <code class="language-plaintext highlighter-rouge">working directory</code> (not yet staged).</p>
+</blockquote>
+
+<p>Now <strong>view your staged changes</strong>, using <code class="language-plaintext highlighter-rouge">--staged</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git diff <span class="nt">--staged</span>
+
+diff <span class="nt">--git</span> a/profile.md b/profile.md
+index e69de29..e0241d6 100644
+<span class="nt">---</span> a/profile.md
++++ b/profile.md
+@@ <span class="nt">-0</span>,0 +1 @@
++# Ryan Morris
+<span class="se">\ </span>No newline at end of file
+</code></pre></div></div>
+
+<p><strong>Stage those pending changes</strong> which are in your <code class="language-plaintext highlighter-rouge">working directory</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git add profile.md
+
+<span class="nv">$&gt;</span> git status
+
+On branch main
+Changes to be committed:
+  <span class="o">(</span>use <span class="s2">"git restore --staged &lt;file&gt;..."</span> to unstage<span class="o">)</span>
+	new file:   profile.md
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 If you check the <code class="language-plaintext highlighter-rouge">git diff</code> now, what do you expect to see? You’ll actually see <em>no</em> changes since you have nothing new/in progress within your <code class="language-plaintext highlighter-rouge">working directory</code>… everything is in the <code class="language-plaintext highlighter-rouge">staging area</code> now.</p>
+</blockquote>
+
+<p>Finally, <strong>commit your staged work</strong>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 You don’t <em>have</em> to stage all your changes before you commit. You can have a “dirty” <code class="language-plaintext highlighter-rouge">working directory</code> and still <code class="language-plaintext highlighter-rouge">commit</code>… only your staged changes will be committed and your work in progress in the <code class="language-plaintext highlighter-rouge">working directory</code> will remain in place.</p>
+</blockquote>
+
+<p><strong>Check your log</strong>, formatting it so it shows only a single line per commit. Your commit ids and messages will be different than mine:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span>
+
+50c79b2 <span class="o">(</span>HEAD -&gt; main<span class="o">)</span> Updated my profile
+5ca957c Added my profile
+0584d0f My First Commit
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="5-make-another-commit">5. Make another commit</h2>
+
+<p>Practice making a few more modifications to the <code class="language-plaintext highlighter-rouge">profile.md</code> file, staging and committing as you like. As you work, check your <code class="language-plaintext highlighter-rouge">status</code> and the <code class="language-plaintext highlighter-rouge">log</code>.</p>
+
+<hr />
+
+<h2 id="bonus-1-set-up-a-difftool">Bonus 1: Set up a difftool</h2>
+
+<p><strong><em>This is optional.</em></strong></p>
+
+<p>You can configure git to use your preferred GUI client to view diffs, rather than displaying them in the command line.</p>
+
+<p><em>Just as an example, here is how you might go about using Beyond Compare 4:</em></p>
+
+<p><em>Not sure what tool to use?</em> Try running <code class="language-plaintext highlighter-rouge">git difftool --tool-help</code> to see a list of tools that git knows how to work with.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git difftool <span class="nt">--tool-help</span>
+</code></pre></div></div>
+
+<p>You might also want to check if you already have a difftool set up:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config diff.tool
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>Make sure the application you want to use is installed</p>
+  </li>
+  <li>
+    <p>Set up the tool with git</p>
+  </li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> difftool.bc.path <span class="s2">"c:/Program Files/Beyond Compare 4/bcomp.exe"</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Use it as a tool, on-the-fly:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git difftool <span class="nt">-t</span> bc HEAD^..HEAD
+</code></pre></div></div>
+
+<ol>
+  <li>Optionally instruct git to <em>always</em> use this “tool” by default:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> diff.tool bc
+</code></pre></div></div>
+
+<p>Then you can invoke it like so:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git difftool HEAD^..HEAD
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-2-sub-directory">Bonus 2: Sub-directory</h2>
+
+<p>Create an empty sub-directory and see if you can <code class="language-plaintext highlighter-rouge">commit</code> the change:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>tmp
+git status
+</code></pre></div></div>
+
+<p>Git does not bother tracking empty directories. If you’d like to make git track this directory, create a file inside it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch </span>tmp/empty
+git add tmp/empty
+git commit
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">empty</code> file is nothing specific to git, it’s a convention that some teams have adopted. You may also see teams use <code class="language-plaintext highlighter-rouge">.gitkeep</code> files to force git to track an empty directory.</p>
+
+<hr />
+
+<h2 id="bonus-3-explore-git">Bonus 3: Explore <code class="language-plaintext highlighter-rouge">.git</code></h2>
+
+<p>Every repository has a single, hidden <code class="language-plaintext highlighter-rouge">.git</code> directory at the top-level. Look inside:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> <span class="nt">-la</span>
+<span class="nb">ls</span> <span class="nt">-la</span> .git
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">.git</code> directory is a hidden directory managed by <code class="language-plaintext highlighter-rouge">git</code>, it contains your <code class="language-plaintext highlighter-rouge">--local</code> project config and all the data (every file you commit to the project) for this specific project.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> <span class="nb">ls</span> <span class="nt">-la</span> .git/objects
+
+<span class="c"># stuff...</span>
+.git/objects/92/c3b0c954b253d49aa4834707281ab3162aaa44
+<span class="c"># more stuff...</span>
+</code></pre></div></div>
+
+<p>If you want to view the contents of a git object, you can use <code class="language-plaintext highlighter-rouge">cat-file</code> on the <em>full</em> object identifier:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git cat-file <span class="nt">-p</span> 92c3b0c954b253d49aa4834707281ab3162aaa44
+</code></pre></div></div>
+
+<p>Git lightly compresses files and stores every version of every file within this “object database”.</p>
+
+<p>Try using <code class="language-plaintext highlighter-rouge">cat-file</code> to view information about your last commit, ex:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git cat-file <span class="nt">-p</span> HEAD
+
+tree 36ca93750277df9f79a7209bbc74e9189dce35d2
+author RM 1630967329 <span class="nt">-0400</span>
+committer RM 1630967329 <span class="nt">-0400</span>
+
+First Commit
+</code></pre></div></div>
+
+<p>What is the <code class="language-plaintext highlighter-rouge">tree</code> id mentioned here? Try using <code class="language-plaintext highlighter-rouge">cat-file</code> on that identifier as well.</p>
+
+<blockquote>
+  <p>🔎 A <code class="language-plaintext highlighter-rouge">tree</code>, which represents a directory listing, is one of the four object types <code class="language-plaintext highlighter-rouge">git</code> stores in its database, alongside <code class="language-plaintext highlighter-rouge">blob</code>, <code class="language-plaintext highlighter-rouge">commit</code> and <code class="language-plaintext highlighter-rouge">tag</code>.</p>
+</blockquote>
+
+<hr />
+
+<p><em>All done</em></p>
+
+
+      </section>
+
+    </div>
+    <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

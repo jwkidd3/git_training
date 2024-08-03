@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Configuration | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Configuration" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="config.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/config.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Configuration" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Configuration","url":"http://fundamentals.gitgood.training/labs/config.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      <h1 id="configuration">Configuration</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>Make sure you have <code class="language-plaintext highlighter-rouge">git</code> installed and configured properly.</p>
+
+<blockquote>
+  <p>You’ll also need to ensure you’re running <code class="language-plaintext highlighter-rouge">git</code> with the right permissions</p>
+</blockquote>
+
+<hr />
+
+<h2 id="1-install-it">1. Install it</h2>
+
+<blockquote>
+  <p><em>If you’re not sure if you have it installed, skip to step #2.</em></p>
+</blockquote>
+
+<p>You can do this in a few ways:</p>
+
+<ol>
+  <li>Windows: <a href="https://gitforwindows.org/">Git For Windows</a></li>
+  <li>Mac: <a href="https://brew.sh/">Homebrew</a> <code class="language-plaintext highlighter-rouge">brew install git</code></li>
+  <li>Either: Download from <a href="https://git-scm.com/">Git SCM</a></li>
+</ol>
+
+<p>If you want to <em>update</em> your version of Git, you can:</p>
+
+<ol>
+  <li>Update via Git For Windows: <code class="language-plaintext highlighter-rouge">git update-git-for-windows</code></li>
+  <li>Update via Homebrew <code class="language-plaintext highlighter-rouge">brew upgrade git</code></li>
+  <li>Re-download and install from <a href="https://git-scm.com/">Git SCM</a></li>
+</ol>
+
+<blockquote>
+  <p>You <em>may</em> need to restart your command-line to use the updated version of Git.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="2-verify-your-version">2. Verify your Version</h2>
+
+<h3 id="windows-users">Windows Users</h3>
+
+<p>You can run git within any terminal environment, including <code class="language-plaintext highlighter-rouge">DOS</code>, <code class="language-plaintext highlighter-rouge">PowerShell</code>, etc.</p>
+
+<p>If you’re new to <code class="language-plaintext highlighter-rouge">git</code>, I strongly recommend using <code class="language-plaintext highlighter-rouge">Git Bash</code> (and not <code class="language-plaintext highlighter-rouge">DOS</code>), which is included with <code class="language-plaintext highlighter-rouge">Git for Windows</code>.</p>
+
+<p><strong>Open Git Bash</strong> (or your terminal).</p>
+
+<blockquote>
+  <p>🔎 You can start Git from any location in your system via the file browser’s context menu by right clicking on a folder and then choosing <code class="language-plaintext highlighter-rouge">Git Bash Here</code>.</p>
+</blockquote>
+
+<p><strong>Check your git version</strong>:</p>
+
+<blockquote>
+  <p>⚠️ About my examples: The <code class="language-plaintext highlighter-rouge">$&gt;</code> is intended to represent a “bash prompt” and is not something you will type in. You should type in only <code class="language-plaintext highlighter-rouge">git --version</code> (the text after the prompt). I do this to help visualize potential <em>output</em> below the command being entered.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># aim for 2.24 or above</span>
+<span class="nv">$&gt;</span> git <span class="nt">--version</span>
+
+git version 2.30.0
+</code></pre></div></div>
+
+<h3 id="unixlinuxmac-users">Unix/Linux/Mac Users:</h3>
+
+<p><strong>Open up your <code class="language-plaintext highlighter-rouge">terminal</code> or <code class="language-plaintext highlighter-rouge">command-line</code> of choice</strong>.</p>
+
+<p>From the terminal prompt, <strong>check your git version</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git <span class="nt">--version</span>
+
+git version 2.30.0
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 I’m using <a href="https://www.zsh.org/">zsh</a> - which is now the default terminal on Mac - and I’ve dressed it up with <a href="https://ohmyz.sh/">Oh My ZSH</a>.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="3-essential-configs">3. Essential Configs</h2>
+
+<p><strong>Make sure you have both</strong> your <code class="language-plaintext highlighter-rouge">user.name</code> and <code class="language-plaintext highlighter-rouge">user.name</code> configured:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git config user.name
+Michael Scott
+
+<span class="nv">$&gt;</span> git config user.email
+<a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="4f22613c2c203b3b0f2b22262929232621612c2022">[email&#160;protected]</a>
+</code></pre></div></div>
+
+<p>If you don’t see a value echoed back then you will need to <strong>set the config values</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> user.name <span class="s2">"Michael Scott"</span>
+git config <span class="nt">--global</span> user.email <span class="s2">"<a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="a8c586dbcbc7dcdce8ccc5c1cecec4c1c686cbc7c5">[email&#160;protected]</a>"</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 Git has three config levels: <code class="language-plaintext highlighter-rouge">--system</code>,  <code class="language-plaintext highlighter-rouge">--global</code> and <code class="language-plaintext highlighter-rouge">--local</code>.</p>
+
+  <p>Windows tends to favor <code class="language-plaintext highlighter-rouge">--system</code> instead of <code class="language-plaintext highlighter-rouge">--global</code>.</p>
+
+  <p>Tip: If using <code class="language-plaintext highlighter-rouge">--global</code> fails because the “file does not exist”, use <code class="language-plaintext highlighter-rouge">--system</code> instead.</p>
+</blockquote>
+
+<p>Finally, <strong>list all your configs</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--list</span>
+</code></pre></div></div>
+
+<p>This will list configs based on your <em>location</em>, meaning, your current directory. git is a context-aware application; directory in which you <em>run</em> <code class="language-plaintext highlighter-rouge">git</code> will affect its behavior.</p>
+
+<p><code class="language-plaintext highlighter-rouge">git config --list</code> will use local, global or system, depending on what is available in that context.</p>
+
+<p><code class="language-plaintext highlighter-rouge">git config --list --global</code> will explicitly list <em>only</em> what is in the global config file.</p>
+
+<hr />
+
+<h2 id="4-set-an-editor-optional">4. Set an Editor (Optional)</h2>
+
+<p>As you create commits with Git you’ll be prompted to type in a message describing the commit. Git will use <code class="language-plaintext highlighter-rouge">vim</code> as its default editor when it asks for a message, however you can customize this if you wish.</p>
+
+<p>If you aren’t a <code class="language-plaintext highlighter-rouge">vim</code> fan then I recommend setting this to another editor of your choice.</p>
+
+<blockquote>
+  <p>💡 You should choose a text editor that can be opened and closed <em>quickly</em>. Your IDE (ex: JetBrains) is not appropriate for this kind of usage.</p>
+</blockquote>
+
+<p>If desired, <strong>change the <code class="language-plaintext highlighter-rouge">core.editor</code> value</strong>.</p>
+
+<p>Here are some popular options… if you don’t see the editor you want to use then do a quick google search for your text editor + “git core.editor”.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Windows - Notepad++</span>
+git config <span class="nt">--global</span> core.editor <span class="s2">"'C:/Program Files/Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin"</span>
+
+<span class="c"># Windows - Notepad++ in x86</span>
+git config <span class="nt">--global</span> core.editor <span class="s2">"'C:/Program Files (x86)/Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin"</span>
+
+<span class="c"># Sublime Text</span>
+<span class="c">#</span>
+<span class="c"># Additional Requirement:</span>
+<span class="c"># This assumes you have `sublime text` installed _and_ you've set up the `subl` alias</span>
+<span class="c"># per [these instructions](https://www.sublimetext.com/docs/command_line.html)</span>
+<span class="c">#</span>
+<span class="c"># Or use homebrew:</span>
+
+git config <span class="nt">--global</span> core.editor <span class="s2">"subl -n -w"</span>
+
+<span class="c"># BBEdit (Previously Text Wrangler)</span>
+git config <span class="nt">--global</span> core.editor <span class="s2">"bbedit -w"</span>
+
+<span class="c"># VS Code</span>
+<span class="c">#</span>
+<span class="c"># Additional Requirement:</span>
+<span class="c"># This requires you also enable the "VS Code Shell Command", via the command-pallete</span>
+<span class="c"># Ex: cmd-shift-p, then search "Shell", "Enable Shell Command". </span>
+<span class="c"># This will make it so you can execute "code" via the command line</span>
+git config <span class="nt">--global</span> core.editor <span class="s2">"code --wait"</span>
+
+<span class="c"># Windows Notepad</span>
+git config <span class="nt">--global</span> core.editor notepad
+
+<span class="c"># Atom</span>
+git config <span class="nt">--global</span> core.editor <span class="s2">"atom --wait"</span>
+
+<span class="c"># Back to the default, VIM</span>
+git config <span class="nt">--global</span> core.editor vim
+</code></pre></div></div>
+
+<p>All configurations are stored in plaintext format. You can ask git to edit the config file with <code class="language-plaintext highlighter-rouge">git config --edit</code> and it will use the <code class="language-plaintext highlighter-rouge">core.editor</code> value.</p>
+
+<p><strong>Test your editor settings</strong> by using git to edit the configuration file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> <span class="nt">--edit</span>
+
+<span class="c"># or, if using the system level...</span>
+git config <span class="nt">--system</span> <span class="nt">--edit</span>
+</code></pre></div></div>
+
+<h4 id="tips-if-usingstuck-in-vim">Tips: If Using/Stuck In <code class="language-plaintext highlighter-rouge">vim</code>:</h4>
+<blockquote>
+
+  <p><code class="language-plaintext highlighter-rouge">esc :q</code> to quit</p>
+
+  <p><code class="language-plaintext highlighter-rouge">esc :wq</code> to write and quit</p>
+
+  <p><code class="language-plaintext highlighter-rouge">i</code> to enter “insert mode”</p>
+
+  <p><code class="language-plaintext highlighter-rouge">esc</code> enters into “command mode”</p>
+</blockquote>
+
+<hr />
+
+<h2 id="5-other-helpful-configs-optional">5. Other Helpful Configs (Optional)</h2>
+
+<h3 id="corepager"><code class="language-plaintext highlighter-rouge">core.pager</code></h3>
+
+<p>If you want to disable the “pager”, you can turn it off by providing an empty string to git as the <code class="language-plaintext highlighter-rouge">core.pager</code> value.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># optional: turn it off</span>
+git config <span class="nt">--global</span> core.pager <span class="s2">""</span>
+
+<span class="c"># optional: turn it (back) on (default)</span>
+git config <span class="nt">--global</span> core.pager less
+
+<span class="c"># optional: turn it off for just the branch listing</span>
+git config <span class="nt">--global</span> pager.branch <span class="s2">""</span>
+</code></pre></div></div>
+
+<h3 id="helpautocorrect"><code class="language-plaintext highlighter-rouge">help.autoCorrect</code></h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># only if you're on git 2.34 or above...</span>
+git config <span class="nt">--global</span> help.autoCorrect <span class="s2">"prompt"</span> 
+</code></pre></div></div>
+
+<h3 id="aliasgraph"><code class="language-plaintext highlighter-rouge">alias.graph</code></h3>
+
+<p>Do you want a helpful alias for graphing log output?</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> alias.graph <span class="s2">"log --oneline --graph --all --decorate"</span>
+</code></pre></div></div>
+
+<h2 id="6-custom-bash-prompts-optional">6. Custom Bash Prompts (Optional)</h2>
+
+<p>You can customize your bash prompt to show additional information like the current branch, if staging has changes, etc.</p>
+
+<h3 id="z-shell">Z Shell</h3>
+
+<p>I’m using <code class="language-plaintext highlighter-rouge">zsh</code> with the <a href="https://ohmyz.sh/">Oh My ZSH</a> framework for plugins and themes.</p>
+
+<p>This isn’t necessarily up to date, but this represents how I set it up - I recommend you follow <strong>your own path</strong> and <a href="https://github.com/ohmyzsh/ohmyzsh/wiki">read the docs</a>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># first install OhMyZSH</span>
+<span class="c"># visit: https://ohmyz.sh/</span>
+<span class="c"># read: https://github.com/ohmyzsh/ohmyzsh/wiki</span>
+
+<span class="c"># then installed plugins with homebrew</span>
+brew <span class="nb">install </span>zsh-autosuggestions
+brew <span class="nb">install </span>zsh-syntax-highlighting
+
+<span class="c"># follow directions echoed out by homebrew... installed plugins into my zsh config</span>
+<span class="nb">source</span> /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+<span class="nb">source</span> /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+<span class="c"># then I further edited my ~/.zshrc file to enable plugins like git</span>
+<span class="c"># to update the line:</span>
+<span class="nv">plugins</span><span class="o">=(</span>git<span class="o">)</span>
+<span class="c"># to read:</span>
+<span class="nv">plugins</span><span class="o">=(</span>git zsh-autosuggestions zsh-syntax-highlighting<span class="o">)</span>
+
+</code></pre></div></div>
+
+<h3 id="git-bash-windows">Git Bash (Windows)</h3>
+
+<p>There are plenty of resources out there, but <a href="https://blog.devgenius.io/how-to-customize-the-git-bash-shell-prompt-336f6aefcf3f">this one</a> had a great set of tips for customizing the Git Bash prompt.</p>
+
+<p>The git bash profile files live in <code class="language-plaintext highlighter-rouge">/etc/profile.d/</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /etc/profile.d/
+explorer <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>From within here you’re looking for the <code class="language-plaintext highlighter-rouge">git-prompt.sh</code> file.</p>
+
+<hr />
+
+<p><em>All done</em></p>
+
+
+      </section>
+    </div>
+    <script data-cfasync="false" src="../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

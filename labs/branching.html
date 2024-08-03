@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Branching | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Branching" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="branching.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/branching.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Branching" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Branching","url":"http://fundamentals.gitgood.training/labs/branching.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      <h1 id="branching">Branching</h1>
+
+<h2 id="overview">Overview:</h2>
+
+<p>We’ll all start a new project for a simple, plaintext book (like I’ve been demoing). You’ll tackle several <em>tasks</em> (or tickets) in individual branches. All new work (your tasks) should start from the default branch, <code class="language-plaintext highlighter-rouge">main</code>. The tasks to be completed are:</p>
+
+<ol>
+  <li>Creating an introduction</li>
+  <li>Creating Chapter 1</li>
+  <li>Creating Chatper 2</li>
+</ol>
+
+<blockquote>
+  <p>⚠️ If you’re working with an older version of git, you’ll use <code class="language-plaintext highlighter-rouge">git checkout</code> instead of <code class="language-plaintext highlighter-rouge">git switch</code>. If you have <code class="language-plaintext highlighter-rouge">git switch</code> I do recommend you begin using it.</p>
+</blockquote>
+
+<blockquote>
+  <p>⚠️ Depending on your version of git, your default branch will be either <code class="language-plaintext highlighter-rouge">master</code> or <code class="language-plaintext highlighter-rouge">main</code>. The sample code below uses <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+  <p>If you want to change your branch name you can:</p>
+
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch master
+git branch <span class="nt">-m</span> main
+</code></pre></div>  </div>
+
+</blockquote>
+
+<hr />
+
+<h2 id="1-initialize-a-new-repository">1. Initialize a new repository</h2>
+
+<p>If you are still in your previous project folder, <code class="language-plaintext highlighter-rouge">cd ..</code> out in order to begin a new project <em>outside</em> the previous project.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># make sure I'm not starting this new project in my previous my-profile project folder</span>
+<span class="nv">$&gt;</span> <span class="nb">pwd</span>
+/Users/morris/my-profile
+
+<span class="nv">$&gt;</span> <span class="nb">cd</span> ..
+</code></pre></div></div>
+
+<p><strong>Start a new git project</strong> using <code class="language-plaintext highlighter-rouge">init</code>, called <code class="language-plaintext highlighter-rouge">my-book</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git init my-book
+
+<span class="nb">cd </span>my-book
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ Don’t forget to <code class="language-plaintext highlighter-rouge">cd</code> into your new directory!</p>
+</blockquote>
+
+<hr />
+
+<h2 id="2-create-the-first-commit">2. Create the first commit.</h2>
+
+<p>Create your first commit - without any files, I recommend starting with an empty commit. You can to that with the <code class="language-plaintext highlighter-rouge">--allow-empty</code> flag:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">--allow-empty</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-preparing-to-work">3. Preparing to work</h2>
+
+<p>This book will need a few things. I’ve created three “tickets” for you:</p>
+
+<ul>
+  <li><strong>Ticket #1</strong>: An introduction</li>
+  <li><strong>Ticket #2</strong>: Chapter 1</li>
+  <li><strong>Ticket #3</strong>: Chapter 2</li>
+</ul>
+
+<p>Using the “feature branch workflow” address each of these as individual feature branches.</p>
+
+<blockquote>
+  <p>🔎 This just means we’ll organize each “distinct feature” into separate branches - in this this way, one feature can be released without depending on another. It also encourages us to keep our mainline (ex: <code class="language-plaintext highlighter-rouge">main</code>) stable for the whole team.</p>
+
+  <p>How granular you get is up to you and your team. Many teams will assume one ticket maps to one branch.</p>
+</blockquote>
+
+<p><strong>View your log</strong> as a graph so we can refer back to it to compare how it changes as we do work in branches:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--graph</span> <span class="nt">--oneline</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="4-do-ticket-1">4. Do Ticket #1</h2>
+<h3 id="the-intro">The Intro</h3>
+
+<p>Create a branch to contain your work for the introduction to the book. Add a new file, <code class="language-plaintext highlighter-rouge">introduction.md</code> with a little blurb of text.</p>
+
+<p><strong>Create a new branch</strong> from <code class="language-plaintext highlighter-rouge">main</code>. The name should be unique enough that it won’t be duplicated by any team members doing unrelated work. You could use the ticket id, ex: <code class="language-plaintext highlighter-rouge">feature/1</code> or just a descriptor, ex: <code class="language-plaintext highlighter-rouge">the-intro</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git branch the-intro
+</code></pre></div></div>
+
+<p><strong>Switch</strong> to your new branch and <strong>create a new file</strong>,  <code class="language-plaintext highlighter-rouge">introduction.md</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch the-intro
+<span class="nb">touch </span>introduction.md
+</code></pre></div></div>
+
+<p><strong>Stage and commit</strong> the file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s1">'Added the introduction'</span>
+</code></pre></div></div>
+
+<p><strong>Edit the file</strong>, giving it some contents - be as creative or as boring as you like!</p>
+
+<p><strong>Stage &amp; commit the change</strong> to the same <code class="language-plaintext highlighter-rouge">the-intro</code> branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add introduction.md
+git commit <span class="nt">-m</span> <span class="s1">'Updated the introduction'</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">git status</code> should show all clean / no changes.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status
+
+On branch the-intro
+nothing to commit, working tree clean
+</code></pre></div></div>
+
+<p>Now, <strong>check the log</strong> to get your bearings:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span>
+
+344b256 <span class="o">(</span>HEAD -&gt; the-intro<span class="o">)</span> Updated the introduction
+957dc19 Added the introduction
+b030b1a <span class="o">(</span>main<span class="o">)</span> First commit
+</code></pre></div></div>
+
+<p>You can see that you are <em>on</em> <code class="language-plaintext highlighter-rouge">the-intro</code> since <code class="language-plaintext highlighter-rouge">HEAD</code> is pointing to that branch. Your <code class="language-plaintext highlighter-rouge">main</code> branch is a little behind you.</p>
+
+<blockquote>
+  <p>🔎 <code class="language-plaintext highlighter-rouge">git branch</code> will also tell you which branch you’re on.</p>
+</blockquote>
+
+<p>OK, you’re all done with this task.</p>
+
+<hr />
+
+<h2 id="5-do-ticket-2">5. Do Ticket #2</h2>
+<h3 id="create-chapter-1">Create “chapter 1”</h3>
+
+<p>When beginning new work, take care to start from the right location in history – this is usually the <code class="language-plaintext highlighter-rouge">main</code> branch (or your team’s trunk).</p>
+
+<p><strong>Switch back to <code class="language-plaintext highlighter-rouge">main</code></strong> and <strong>create a new branch</strong>, <code class="language-plaintext highlighter-rouge">add-chapter-1</code> to contain the work that resolves our “ticket #2”.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git branch add-chapter-1
+git switch add-chapter-1
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 Remember, all new work should start from our “mainline”, which in this case is probably <code class="language-plaintext highlighter-rouge">main</code> (but it could be <code class="language-plaintext highlighter-rouge">master</code> or <code class="language-plaintext highlighter-rouge">development</code>). This way new work only has the latest, “stable” work that has been released and we aren’t mixing features that are still in development/testing.</p>
+</blockquote>
+
+<p><strong>Create a <code class="language-plaintext highlighter-rouge">chapter1.md</code> file</strong>, with some basic markdown contents, <strong>stage and commit this change</strong> to the <code class="language-plaintext highlighter-rouge">add-chapter-1</code> branch.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch </span>chapter1.md
+<span class="c"># edit the file... or </span>
+<span class="c"># echo "# Chapter 1" &gt;&gt; chapter1.md</span>
+git add chapter1.md
+git commit <span class="nt">-m</span> <span class="s2">"Created Chapter 1"</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">git status</code> should show all clean / no changes.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status             
+On branch add-chapter-1
+nothing to commit, working tree clean
+</code></pre></div></div>
+
+<p><strong>Check the log</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span>
+
+ca05c2e <span class="o">(</span>HEAD -&gt; add-chapter-1<span class="o">)</span> Created Chapter 1
+b030b1a <span class="o">(</span>main<span class="o">)</span> First commit
+</code></pre></div></div>
+
+<p>Notice, the <code class="language-plaintext highlighter-rouge">log</code> is only showing your current branch’s history – it does not show all branches by default.</p>
+
+<p>We can ask to see <code class="language-plaintext highlighter-rouge">--all</code> <em>reachable</em> commits in our history. We can also ask git to draw the log as a “graph”, with <code class="language-plaintext highlighter-rouge">--graph</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+
+<span class="k">*</span> ca05c2e <span class="o">(</span>HEAD -&gt; add-chapter-1<span class="o">)</span> Created Chapter 1
+| <span class="k">*</span> 344b256 <span class="o">(</span>the-intro<span class="o">)</span> Updated the introduction
+| <span class="k">*</span> 957dc19 Added the introduction
+|/  
+<span class="k">*</span> b030b1a <span class="o">(</span>main<span class="o">)</span> First commit
+</code></pre></div></div>
+
+<p>We can see both our branches now. They are “ahead” of <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+<blockquote>
+  <p>⚠️ If you’re on an older version of git, you might need to include <code class="language-plaintext highlighter-rouge">--decorate</code> if you want <code class="language-plaintext highlighter-rouge">log</code> to display branches and refs.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="6-do-ticket-3">6. Do Ticket #3</h2>
+<h3 id="create-chapter-2">Create “chapter 2”</h3>
+
+<p>Following the same workflow, create <code class="language-plaintext highlighter-rouge">chapter2.md</code> in a new branch off <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+<blockquote>
+  <p>⚠️ Remember to switch back to <code class="language-plaintext highlighter-rouge">main</code> first, otherwise you’ll be mixing the “chapter 1” work into your “chapter 2” work, which in an engineering world would mean “chapter 2” depends on “chapter 1” passing code review, tests, etc.</p>
+</blockquote>
+
+<p>You can use <code class="language-plaintext highlighter-rouge">switch -c</code> to quickly create <em>and</em> switch to a new branch, ya know, to speed up your workflow:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git switch <span class="nt">-c</span> add-chapter-2
+
+<span class="nb">touch </span>chapter2.md
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Chapter 2 Created"</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ Older versions of git would use <code class="language-plaintext highlighter-rouge">checkout -b</code></p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">git status</code> should show all clean / no changes.</p>
+
+<hr />
+
+<h2 id="check-point">Check point:</h2>
+
+<p>Check your branches using <code class="language-plaintext highlighter-rouge">git branch</code>. You should have four branches</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git branch
+<span class="k">*</span> add-chapter-2
+  add-chapter-1
+  the-intro
+  main
+</code></pre></div></div>
+
+<p><strong>Check your status</strong>, <code class="language-plaintext highlighter-rouge">git status</code>. You should have no changes pending</p>
+
+<p>And finally, <strong>view your graph</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+
+<span class="k">*</span> a840d1c <span class="o">(</span>HEAD -&gt; add-chapter-2<span class="o">)</span> Created Chapter 2
+| <span class="k">*</span> ca05c2e <span class="o">(</span>add-chapter-1<span class="o">)</span> Created Chapter 1
+|/  
+| <span class="k">*</span> 344b256 <span class="o">(</span>the-intro<span class="o">)</span> Updated the introduction
+| <span class="k">*</span> 957dc19 Added the introduction
+|/  
+<span class="k">*</span> b030b1a <span class="o">(</span>main<span class="o">)</span> First commit
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="bonus-1-detaching">Bonus 1: Detaching</h1>
+
+<p>It’s possible to <code class="language-plaintext highlighter-rouge">switch</code> to any commit in your project’s history, allowing us to view previous versions of our codebase, start branches from old versions, run tests, etc.</p>
+
+<p>Find the first commit of your project and switch to it.</p>
+
+<blockquote>
+  <p>💡 Tip: <code class="language-plaintext highlighter-rouge">git log --reverse</code> will help reveal your first commit id.</p>
+</blockquote>
+
+<blockquote>
+  <p>⚠️ Your first commit id will be different from mine</p>
+</blockquote>
+
+<details>
+
+<summary>The solution:</summary>
+
+<pre class="highlight">
+$&gt; git log --reverse --oneline
+7820037 Starting Commit
+9bffb83 Chapter 1
+...
+
+$&gt; git switch --detach 7820037
+</pre>
+
+</details>
+
+<p><br /></p>
+
+<p>Once solved…</p>
+
+<p>You’re in a “detached HEAD” state - which just means that if you make new commits (without a branch) you are likely to lose track of them.</p>
+
+<p>Both <code class="language-plaintext highlighter-rouge">git status</code> and <code class="language-plaintext highlighter-rouge">git branch</code> will inform you that you’re in this state.</p>
+
+<p><strong>Create a commit</strong>, then <strong>create a branch</strong> so that you don’t lose track of that new work.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch </span>test-file
+git add test-file
+git commit <span class="nt">-m</span> <span class="s1">'Test file created while in detached HEAD state'</span>
+
+<span class="c"># a branch will help keep track of that new work you just did...</span>
+git switch <span class="nt">-c</span> test-branch
+</code></pre></div></div>
+
+<p>Finally, <strong>switch back to <code class="language-plaintext highlighter-rouge">main</code></strong> when you’re done exploring:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="bonus-2-amending-the-intro">Bonus 2: Amending the intro</h1>
+
+<p>Let’s assume we want to do some additional work on the introduction. Using <code class="language-plaintext highlighter-rouge">the-intro</code> branch, make an additional change to the <code class="language-plaintext highlighter-rouge">intro.md</code> file (add a header?) and <code class="language-plaintext highlighter-rouge">--amend</code> the latest commit on that branch instead of creating a new commit.</p>
+
+<blockquote>
+  <p>Why amend? Amend is like a “redo” of your previous commit (on your current branch), you might prefer an <code class="language-plaintext highlighter-rouge">amend</code> over a new <code class="language-plaintext highlighter-rouge">commit</code> to conceal a mistake, accidental inclusion of a file, experiment you tried and didn’t like… it results in one final commit with the sum total of your changes instead of 2 commits, which can be considered tidier.</p>
+</blockquote>
+
+<details>
+
+<summary>The solution:</summary>
+
+<pre class="highlight">
+git switch the-intro
+
+# edit the file...
+
+git add introduction.md
+git commit --amend
+</pre>
+
+</details>
+
+<p><br /></p>
+
+<hr />
+
+<h1 id="bonus-3-squashing">Bonus 3: Squashing</h1>
+
+<p>You can squash branches down to reduce the number of commits inside the branch - one might do this to remove mistakes, experiments, etc that occurred in the many commits you might make throughout the life of a branch.</p>
+
+<p>Choose one of your branches that have more than 1 commit, or create a new branch and make 3 arbitrary commits on it.</p>
+
+<p>View the graph (<code class="language-plaintext highlighter-rouge">git log --oneline --graph --all</code>) and then leverage <code class="language-plaintext highlighter-rouge">reset</code> to “squash” that branch down to just a single commit.</p>
+
+<p>You’ll need to determine <em>where to <code class="language-plaintext highlighter-rouge">reset</code> to</em> to pull this off. You can do this visually by looking at the graph, or you could try <code class="language-plaintext highlighter-rouge">git merge-base HEAD main</code> – what does this reveal?</p>
+
+<details>
+<summary>The solution:</summary>
+
+<pre class="highlight">
+git reset $(git merge-base HEAD main) --soft
+git commit -m 'Squashed it all up'
+
+# you could also just find the commit id (instead of using merge-base)
+# ex: git reset afe832 --soft
+</pre>
+
+</details>
+
+<p><br /></p>
+
+<hr />
+
+<h1 id="all-done">All done</h1>
+
+<p>Make sure you’re all “clean” with <code class="language-plaintext highlighter-rouge">git status</code></p>
+
+
+      </section>
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

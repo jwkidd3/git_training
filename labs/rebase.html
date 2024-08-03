@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Rebasing &amp; Squashing Lab | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Rebasing &amp; Squashing Lab" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="rebase.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/rebase.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Rebasing &amp; Squashing Lab" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Rebasing &amp; Squashing Lab","url":"http://fundamentals.gitgood.training/labs/rebase.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      <h1 id="rebasing--squashing-lab">Rebasing &amp; Squashing Lab</h1>
+
+<p>Practicing the rebase workflow in order to create a graph that is more linear.</p>
+
+<h2 id="setup">Setup</h2>
+
+<p>Clone this repository:
+https://github.com/rm-training/demo-busy-repository</p>
+
+<p>This repository has a few branches that represent work in progress. Take a look at the graph now:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--graph</span> <span class="nt">--oneline</span> <span class="nt">--all</span>
+</code></pre></div></div>
+
+<p>We’re going to leverage <code class="language-plaintext highlighter-rouge">rebase</code> so that our graph is relatively flat, however we’ll also require a “merge commit” when “releasing” into <code class="language-plaintext highlighter-rouge">main</code>, our target branch. In this way we maintain the branch information in the graph.</p>
+
+<p>This is our <em>intended</em> graph after we release <code class="language-plaintext highlighter-rouge">task-1</code>, <code class="language-plaintext highlighter-rouge">task-2</code>, and <code class="language-plaintext highlighter-rouge">task-3</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>   c26d436 <span class="o">(</span>HEAD -&gt; main<span class="o">)</span> Merge branch <span class="s1">'task-2'</span>
+|<span class="se">\</span>
+| <span class="k">*</span> 58ff1fa <span class="o">(</span>task-2<span class="o">)</span> New on task 2 <span class="o">(</span>3<span class="o">)</span>
+| <span class="k">*</span> d896645 New on task 2 <span class="o">(</span>2<span class="o">)</span>
+| <span class="k">*</span> b24ef0c New on task 2
+| <span class="k">*</span> 8d34bce More work on task 2
+| <span class="k">*</span> f43cb80 Task 2 Complete
+|/
+<span class="k">*</span>   1e62014 Merge branch <span class="s1">'task-3'</span>
+|<span class="se">\</span>
+| <span class="k">*</span> bc7e1ce <span class="o">(</span>task-3<span class="o">)</span> Another edit on task 3
+| <span class="k">*</span> 8609443 Working on task 3
+| <span class="k">*</span> 9d83543 Working on task 3
+| <span class="k">*</span> 1999f92 Working on task 3
+|/
+<span class="k">*</span>   d89673a Merge branch <span class="s1">'task-1'</span>
+|<span class="se">\</span>
+| <span class="k">*</span> e178b24 <span class="o">(</span>origin/task-1, task-1<span class="o">)</span> Final work on task 1
+| <span class="k">*</span> fdf0d5c A final edit on task 1
+| <span class="k">*</span> bc63c51 More work on task 1
+| <span class="k">*</span> 50005d7 Task 1 Complete
+|/
+<span class="k">*</span> 6f884c2 <span class="o">(</span>origin/main, origin/HEAD<span class="o">)</span> Initial commit
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="release-task-1">Release <code class="language-plaintext highlighter-rouge">task-1</code></h2>
+
+<p>The graph we’re going for requires the following:</p>
+
+<ul>
+  <li>rebase to get up to date</li>
+  <li>always get up to date before merging into a target branch</li>
+  <li>don’t allow fast forward merges when releasing</li>
+</ul>
+
+<p>Let’s “release” Task 1 - make sure it’s fully up to date with <code class="language-plaintext highlighter-rouge">main</code> by using <code class="language-plaintext highlighter-rouge">rebase</code> (instead of merge/pull). Then merge it into <code class="language-plaintext highlighter-rouge">main</code>, taking care to require a merge commit.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch task-1
+git rebase main
+
+<span class="c"># task-1 is already up to date so the above has no effect...</span>
+
+git switch main
+git merge task-1 <span class="nt">--no-ff</span>
+</code></pre></div></div>
+
+<p>View the graph</p>
+
+<blockquote>
+  <p>💡 Tip: The graph will likely be a little busy because all the remote branches (ex: origin/main) will show - and they will maintain their original position despite you rebasing.</p>
+
+  <p>To reduce noise, you can view the graph just with local <code class="language-plaintext highlighter-rouge">--branches</code> (instead of <code class="language-plaintext highlighter-rouge">--all</code>):</p>
+
+  <p><code class="language-plaintext highlighter-rouge">git log --oneline --graph --branches</code></p>
+</blockquote>
+
+<h2 id="release-task-3">Release <code class="language-plaintext highlighter-rouge">task-3</code></h2>
+
+<p>“Release” Task 3 - but we <em>must</em> get the branch up to date first with <code class="language-plaintext highlighter-rouge">rebase</code> (instead of merge). We aren’t going to use <code class="language-plaintext highlighter-rouge">pull</code> here but if you were going to, you’d have to tell <code class="language-plaintext highlighter-rouge">pull</code> to rebase with <code class="language-plaintext highlighter-rouge">--rebase</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch task-3
+git rebase main
+
+git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--branches</span>
+</code></pre></div></div>
+
+<p>Now you can merge it into <code class="language-plaintext highlighter-rouge">main</code>, taking care to use a merge commit.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git merge task-3 <span class="nt">--no-ff</span>
+
+git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--branches</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>💡 Tip: Accidentally forgot to require a merge commit? Use <code class="language-plaintext highlighter-rouge">reset</code> to undo: <code class="language-plaintext highlighter-rouge">git reset ORIG_HEAD --hard</code></p>
+</blockquote>
+
+<blockquote>
+  <p>🔎 If we’re rebasing we’re going to always get a fast-forward merge when we merge the feature back into our mainline, so we can’t rely on <code class="language-plaintext highlighter-rouge">reset HEAD^</code> to undo a fast-forward. Instead, we can use the built in <code class="language-plaintext highlighter-rouge">ORIG_HEAD</code> that git uses to keep track of the commit just before we did some potentially dangerous action, which includes <code class="language-plaintext highlighter-rouge">rebase</code> and <code class="language-plaintext highlighter-rouge">merge</code>.</p>
+</blockquote>
+
+<h2 id="release-task-2">Release <code class="language-plaintext highlighter-rouge">task-2</code></h2>
+
+<p>Same deal as before!</p>
+
+<p>Get <code class="language-plaintext highlighter-rouge">task-2</code> up to date with <code class="language-plaintext highlighter-rouge">rebase</code>, then <code class="language-plaintext highlighter-rouge">merge</code> it into <code class="language-plaintext highlighter-rouge">main</code> to “release” it.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch task-2
+git rebase main
+
+git switch main
+git merge task-2 <span class="nt">--no-ff</span>
+
+git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--branches</span>
+</code></pre></div></div>
+
+<h2 id="checkpoint">Checkpoint</h2>
+
+<p>View the graph and see how you did.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--branches</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-a-linear-graph">Bonus: A linear graph</h2>
+
+<p>“Reset the deck” (the history of the project) so you can try for a totally linear and compressed graph.</p>
+
+<p>Delete (or reset) your local branches so everything is as it was just after you cloned. (You can also just delete the whole repo and re-clone if you prefer).</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
+git reset origin/main <span class="nt">--hard</span>
+
+git branch <span class="nt">-D</span> task-2 task-1 task-3
+</code></pre></div></div>
+
+<p>Our goal this time is to generate a more succinct graph, like so:</p>
+
+<p>It’s possible to combine rebasing and squashing and merging to produce a graph more like this, after all the merges have been complete:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span> 58ff1fa <span class="o">(</span>HEAD -&gt; main, task-2<span class="o">)</span> Task 2 Complete
+|
+<span class="k">*</span> bc7e1ce <span class="o">(</span>task-3<span class="o">)</span> Task 3 Complete
+|
+<span class="k">*</span> e178b24 <span class="o">(</span>task-1<span class="o">)</span> Task 1 Complete
+|
+<span class="k">*</span> 6f884c2 <span class="o">(</span>origin/main, origin/HEAD<span class="o">)</span> Initial commit
+</code></pre></div></div>
+
+<p>Can you achieve this?</p>
+
+<p>To squash, you can either:</p>
+
+<ol>
+  <li>Use <code class="language-plaintext highlighter-rouge">reset</code></li>
+  <li>Use a series of <code class="language-plaintext highlighter-rouge">cherry-pick --no-commit</code></li>
+  <li>Use <code class="language-plaintext highlighter-rouge">rebase --interactive</code></li>
+</ol>
+
+<p>An interactive rebase lets you script the rebase process. You can try it out - and change <code class="language-plaintext highlighter-rouge">pick</code> for <code class="language-plaintext highlighter-rouge">s</code> or <code class="language-plaintext highlighter-rouge">squash</code> in order to meld a commit in the list to the previous commit.</p>
+
+<p>Instead of just a normal rebase (as in the lab above) try tacking on <code class="language-plaintext highlighter-rouge">--interactive</code> (or <code class="language-plaintext highlighter-rouge">-i</code>) to trigger an <em>interactive rebase</em>.</p>
+
+<blockquote>
+  <p>🔎 Note: You’ll need to keep <em>at least</em> the first commit in the list as <code class="language-plaintext highlighter-rouge">pick</code>.</p>
+</blockquote>
+
+
+      </section>
+
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

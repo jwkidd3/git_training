@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Cleaning up | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Cleaning up" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="cleanup.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/cleanup.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Cleaning up" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Cleaning up","url":"http://fundamentals.gitgood.training/labs/cleanup.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      
+<h1 id="cleaning-up">Cleaning up</h1>
+
+<p><strong>Overview</strong>:</p>
+
+<p>Being able to clean up changes in our staging area and working directory is typical of most daily workflows.</p>
+
+<p>In the same <code class="language-plaintext highlighter-rouge">my-profile</code> project, practice making and undoing changes – undoing commits, un-staging, etc.</p>
+
+<hr />
+
+<h2 id="setup">Setup</h2>
+
+<p><strong>Start from the previous <code class="language-plaintext highlighter-rouge">my-profile</code> repository you already created</strong>, otherwise you can create a new repository with a single file (and single commit).</p>
+
+<blockquote>
+  <p><em>If you need a new repository quickly</em>:</p>
+
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git init my-profile
+<span class="nb">cd </span>my-profile
+<span class="nb">touch </span>profile.md
+<span class="nb">echo</span> <span class="s2">"#My Name"</span> <span class="o">&gt;&gt;</span> profile.md
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"My First Commit"</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<hr />
+
+<h2 id="1-make-some-edits">1. Make some edits</h2>
+
+<p><strong>Make the following changes</strong> so that we can practice using <code class="language-plaintext highlighter-rouge">restore</code>:</p>
+
+<ol>
+  <li>Create an empty file named <code class="language-plaintext highlighter-rouge">junk</code></li>
+  <li>Make an edit to your <code class="language-plaintext highlighter-rouge">profile.md</code> file</li>
+  <li>Create an empty file named <code class="language-plaintext highlighter-rouge">LICENSE</code></li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch </span>junk
+<span class="nb">touch </span>LICENSE
+<span class="c"># also: edit your profile.md file in your fav editor</span>
+<span class="c"># echo "Junk Edit" &gt;&gt; profile.md</span>
+</code></pre></div></div>
+
+<p><strong>Check your status</strong>, you should have three changes listed in your working directory.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status
+
+On branch main
+Changes not staged <span class="k">for </span>commit:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to update what will be committed<span class="o">)</span>
+  <span class="o">(</span>use <span class="s2">"git restore &lt;file&gt;..."</span> to discard changes <span class="k">in </span>working directory<span class="o">)</span>
+	modified:   profile.md
+
+Untracked files:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to include <span class="k">in </span>what will be committed<span class="o">)</span>
+	LICENSE
+	junk
+</code></pre></div></div>
+
+<p><strong>Stage and commit all the changes</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s1">'Bad commit!'</span>
+</code></pre></div></div>
+
+<p>Oh no! What if we didn’t mean to do that 🤦 – let’s undo the commit we just made:</p>
+
+<hr />
+
+<h2 id="2-undoing-the-commit">2. Undoing the commit</h2>
+
+<p><strong>View your log</strong>, then <strong>undo your last commit</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+git log <span class="nt">--oneline</span>
+
+<span class="c"># this is the "undo last commit" command:</span>
+git reset HEAD^
+</code></pre></div></div>
+
+<p>Now <strong>view your log</strong> and <strong>check your status</strong> to see what happened:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--oneline</span>
+git status
+</code></pre></div></div>
+
+<p>You’ll see that the last commit you made is no longer in the <code class="language-plaintext highlighter-rouge">log</code> and the changes you had committed are now back in your <code class="language-plaintext highlighter-rouge">working directory</code> (even staging was cleaned up). This is nice - git didn’t throw out your work!</p>
+
+<p>Your graph went from this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A---B---C---D
+            ^
+            main <span class="o">[</span>HEAD]
+</code></pre></div></div>
+
+<p>To this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A---B---C
+        ^
+        main <span class="o">[</span>HEAD]
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 If you had passed <code class="language-plaintext highlighter-rouge">--hard</code> as an option to <code class="language-plaintext highlighter-rouge">reset HEAD^</code>, git <em>would</em> have thrown out your work, cleaning up both the staging and working directory areas to match the previous commit.</p>
+
+  <p><code class="language-plaintext highlighter-rouge">--hard</code> tells <code class="language-plaintext highlighter-rouge">reset</code> to clean all three areas (working directory, staging area, your branch) to match the version you are resetting to.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="3-un-staging">3. Un-staging</h2>
+
+<p>First, <strong>stage everything</strong>, you’ll see the following changes <em>staged</em>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git add <span class="nb">.</span>
+<span class="nv">$&gt;</span> git status
+
+On branch main
+Changes to be committed:
+  <span class="o">(</span>use <span class="s2">"git restore --staged &lt;file&gt;..."</span> to unstage<span class="o">)</span>
+	new file:   LICENSE
+	new file:   junk
+	modified:   profile.md
+</code></pre></div></div>
+
+<p>We only <em>really</em> want to commit the new <code class="language-plaintext highlighter-rouge">LICENSE</code> file.</p>
+
+<p><strong>Un-stage the changes to <code class="language-plaintext highlighter-rouge">profile.md</code> and <code class="language-plaintext highlighter-rouge">junk</code></strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git restore <span class="nt">--staged</span> profile.md junk
+<span class="nv">$&gt;</span> git status
+
+On branch main
+Changes to be committed:
+  <span class="o">(</span>use <span class="s2">"git restore --staged &lt;file&gt;..."</span> to unstage<span class="o">)</span>
+	new file:   LICENSE
+
+Changes not staged <span class="k">for </span>commit:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to update what will be committed<span class="o">)</span>
+  <span class="o">(</span>use <span class="s2">"git restore &lt;file&gt;..."</span> to discard changes <span class="k">in </span>working directory<span class="o">)</span>
+	modified:   profile.md
+
+Untracked files:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to include <span class="k">in </span>what will be committed<span class="o">)</span>
+	junk
+</code></pre></div></div>
+
+<p>The changes to <code class="language-plaintext highlighter-rouge">profile.md</code> and <code class="language-plaintext highlighter-rouge">junk</code> were taken out of staging – <code class="language-plaintext highlighter-rouge">junk</code> went back to being <code class="language-plaintext highlighter-rouge">untracked</code> which is its original state, and <code class="language-plaintext highlighter-rouge">profile.md</code> changes just remained in the <code class="language-plaintext highlighter-rouge">working directory</code>.</p>
+
+<p>Now <strong>commit <em>only</em> the <code class="language-plaintext highlighter-rouge">LICENSE</code> file</strong> and check the status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git commit
+<span class="nv">$&gt;</span> git status
+On branch main
+Changes not staged <span class="k">for </span>commit:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to update what will be committed<span class="o">)</span>
+  <span class="o">(</span>use <span class="s2">"git restore &lt;file&gt;..."</span> to discard changes <span class="k">in </span>working directory<span class="o">)</span>
+	modified:   profile.md
+
+Untracked files:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to include <span class="k">in </span>what will be committed<span class="o">)</span>
+	junk
+
+no changes added to commit <span class="o">(</span>use <span class="s2">"git add"</span> and/or <span class="s2">"git commit -a"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>You should still see the two pending changes, <code class="language-plaintext highlighter-rouge">profile.md</code> and the untracked <code class="language-plaintext highlighter-rouge">junk</code> file.</p>
+
+<p>Delete the untracked <code class="language-plaintext highlighter-rouge">junk</code> file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm </span>junk
+</code></pre></div></div>
+
+<p>Now, throw out the change to your <code class="language-plaintext highlighter-rouge">profile.md</code> file using <code class="language-plaintext highlighter-rouge">restore</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git restore profile.md
+</code></pre></div></div>
+
+<p>Where did that work go? This is one of the few times you might be at risk of losing “work in progress”. Luckily, if you’ve <em>ever</em> staged that work or committed it, it’s very easy to recover.</p>
+
+<p>Before moving on, check your <code class="language-plaintext highlighter-rouge">status</code> (you should be all clean) and the <code class="language-plaintext highlighter-rouge">log</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+git log <span class="nt">--oneline</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="4-amending-a-commit">4. Amending a Commit</h2>
+
+<p>Let’s add some content to the exciting <code class="language-plaintext highlighter-rouge">LICENSE</code> file.</p>
+
+<p>You just created the file in your last commit, so instead of creating a new commit, use <code class="language-plaintext highlighter-rouge">amend</code> to apply additional changes into the prior commit.</p>
+
+<blockquote>
+  <p>🔎 <code class="language-plaintext highlighter-rouge">--amend</code> can be used to both edit the last commit message and apply additional changes to the previous commit</p>
+</blockquote>
+
+<p><strong>Edit the <code class="language-plaintext highlighter-rouge">LICENSE</code> file</strong> – add a title to the file contents.</p>
+
+<p>Then <strong>stage those changes</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add LICENSE
+</code></pre></div></div>
+
+<p>Now, instead of creating a <em>new</em> commit, <strong><code class="language-plaintext highlighter-rouge">amend</code> the last commit</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">--amend</span>
+</code></pre></div></div>
+
+<p>Your graph goes from this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A---B---C---D
+            ^
+            main <span class="o">[</span>HEAD]
+</code></pre></div></div>
+
+<p>To this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A---B---C---F
+            ^
+            main <span class="o">[</span>HEAD]
+</code></pre></div></div>
+
+<p><strong>Check your status</strong> and your <code class="language-plaintext highlighter-rouge">log</code> – your latest commit id should be new!</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+git log <span class="nt">--oneline</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 Amending is a “history altering” command, which is something we can do safely on commits that we have not yet <em>shared</em> with our team. However, once you <code class="language-plaintext highlighter-rouge">push</code> a <code class="language-plaintext highlighter-rouge">commit</code> (or <code class="language-plaintext highlighter-rouge">branch</code>) up, this implies the commit(s) are shared and you should no longer “amend” those specific commits.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="bonus-1-hard-resets">Bonus 1: Hard Resets</h1>
+
+<p>Git will generally avoid touching <em>untracked</em> files until you <code class="language-plaintext highlighter-rouge">add</code> them to the project.</p>
+
+<p>This can sometimes be confusing when you use <code class="language-plaintext highlighter-rouge">reset</code>, and it can also be tedious when you’re actually trying to clean up a lot of untracked files you no longer want around.</p>
+
+<p>Start by creating 3 (or more) files in your project. Then stage &amp; commit them.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># create the files</span>
+<span class="nb">touch </span>1 2 3
+
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s1">'All my junk'</span>
+</code></pre></div></div>
+
+<p>Now, use <code class="language-plaintext highlighter-rouge">reset HEAD^</code> to undo the commit you just made - then check your status to see what remains:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git reset HEAD^
+<span class="nv">$&gt;</span> git status
+
+On branch main
+
+Untracked files:
+  <span class="o">(</span>use <span class="s2">"git add &lt;file&gt;..."</span> to include <span class="k">in </span>what will be committed<span class="o">)</span>
+	1
+	2
+	3
+</code></pre></div></div>
+
+<p>Those files are back to being untracked. That is to be expected, because that was their <em>original state</em> at this point in history… they are not present in your staging area.</p>
+
+<p>Let’s try that again:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s1">'All my junk (take 2)'</span>
+</code></pre></div></div>
+
+<p>This time, use <code class="language-plaintext highlighter-rouge">reset --hard</code> to undo your last commit, then check the status:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git reset HEAD^ <span class="nt">--hard</span>
+
+<span class="nv">$&gt;</span> git status
+On branch main
+
+nothing to commit, working tree clean
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">--hard</code> is another <em>mode</em> of <code class="language-plaintext highlighter-rouge">reset</code>, and it tells <code class="language-plaintext highlighter-rouge">reset</code> to clean everything up to match where you are resetting to… so now your working directory, staging area and branch <em>all</em> match the previous version.</p>
+
+<p><strong>Extra Bonus</strong>: How can you get those files (1, 2, 3) back? Hint: <code class="language-plaintext highlighter-rouge">reset</code> can help.</p>
+
+<details>
+
+<summary>The solution...</summary>
+
+<pre class="highlight">
+# find the commit where you created those three files
+# then reset back to it:
+git reset ? --hard
+</pre>
+
+</details>
+
+<p><br /></p>
+
+<hr />
+
+<h1 id="bonus-2-squash-commits">Bonus 2: Squash Commits</h1>
+
+<p>Squashing is the act of melding multiple commits into fewer (or just one) commits.</p>
+
+<blockquote>
+  <p>🔎 You might “squash” in order to clean up your work before sharing with the team so that it looks like you only did one or two commits and not 20-30.</p>
+
+  <p>It’s a nice way to create a focused set of commits, rather than a long chain of work that might contain a lot of mistakes, trial-and-error, typos, test breakages, etc.</p>
+</blockquote>
+
+<p>Given what you know, you should be able to pull this off.</p>
+
+<p>Create two changes (to <code class="language-plaintext highlighter-rouge">profile.md</code>) in two sequential commits, then attempt to “squash” these into just one commit.</p>
+
+<p>Your log should go from:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span>
+
+
+c12f218 <span class="o">(</span>HEAD -&gt; main<span class="o">)</span> New Edit 1
+90e230c New Edit 2
+485290e License File
+...
+</code></pre></div></div>
+
+<p>To:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git log <span class="nt">--oneline</span>
+
+f47f294 <span class="o">(</span>HEAD -&gt; main<span class="o">)</span> Combined Edit 1 &amp; 2
+485290e License File
+
+...
+</code></pre></div></div>
+
+<p><em>Need a hint?</em> You’ll use <code class="language-plaintext highlighter-rouge">reset</code> to pull this off.</p>
+
+<details>
+
+<summary>The solution...</summary>
+
+<pre class="highlight">
+# you'll reset back to the starting commit
+# making sure not to do a --hard reset
+git reset 485290e
+
+# then stage &amp; commit forwards
+git add .
+git commit -m 'Squashed things...'
+</pre>
+
+</details>
+
+<p><br /></p>
+
+<hr />
+
+<h2 id="all-done">All done</h2>
+
+<p>To wrap up, <strong>check your <code class="language-plaintext highlighter-rouge">status</code></strong> to make sure you have no pending changes.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$&gt;</span> git status       
+
+On branch main
+nothing to commit, working tree clean
+</code></pre></div></div>
+
+
+
+      </section>
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

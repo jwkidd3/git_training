@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Remotes: Collaborating as a Team | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Remotes: Collaborating as a Team" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="remotes-collab-1.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/remotes-collab-1.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Remotes: Collaborating as a Team" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Remotes: Collaborating as a Team","url":"http://fundamentals.gitgood.training/labs/remotes-collab-1.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      
+<h1 id="remotes-collaborating-as-a-team">Remotes: Collaborating as a Team</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>We’re going to set up a team project that we can all work together on. We’ll leverage pull/merge requests and require code reviews as part of our process. If we had CI/CD, we’d wire those up to our pull/merge requests as well.</p>
+
+<p><strong>The instructor will:</strong> create a team project and establish some branching rules.</p>
+
+<p>Then <strong>students will:</strong> submit a pull/merge request to add their personal profile to the project.</p>
+
+<hr />
+
+<h2 id="1-is-the-team-project-set-up">1. Is the Team Project set up?</h2>
+
+<p>Chase the instructor to get this done :)</p>
+
+<ul>
+  <li>Set branch protection rules</li>
+  <li>Give access</li>
+  <li>Any CI/CD?</li>
+  <li>What is our initial task?</li>
+</ul>
+
+<p>Looking for the invitation?</p>
+
+<ul>
+  <li>GitHub: <repo>/invitations</repo></li>
+  <li>BitBucket: TBD</li>
+  <li>GitLab: TBD</li>
+</ul>
+
+<hr />
+
+<h2 id="2-clone-the-project">2. Clone the project</h2>
+
+<p>Join the project by <strong>cloning it down</strong> to your local system.</p>
+
+<blockquote>
+  <p>⚠️ Make sure you’re not inside another repository - check <code class="language-plaintext highlighter-rouge">pwd</code> and <code class="language-plaintext highlighter-rouge">cd..</code> out if necessary.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone &lt;uri instructor provides&gt; ./the-team
+
+<span class="nb">cd </span>the-team
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">clone</code> will download a full copy of the project history to your local, in a subdirectory named after the project uri. You can, however, specify the subdirectory during the clone.</p>
+
+<hr />
+
+<h2 id="3-add-your-profile-in-a-new-branch">3. Add your profile in a new branch</h2>
+
+<p>Get your bearings by viewing all branches and the graph:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch <span class="nt">-a</span>
+git log <span class="nt">--oneline</span> <span class="nt">--graph</span> <span class="nt">--all</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">clone</code> created a local <code class="language-plaintext highlighter-rouge">main</code> branch for you, which is based off the <code class="language-plaintext highlighter-rouge">origin/main</code> remote ref.</p>
+
+<p><strong>Create a branch</strong> for your work:</p>
+
+<p><em>Example using “ryan”… use your own name and branch name</em>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch <span class="nt">-c</span> ryans-profile
+<span class="nb">touch </span>ryan-morris.md
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Ryans Profile"</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ <strong>It’s important</strong> that you choose a unique branch name; if everyone on the team used <code class="language-plaintext highlighter-rouge">ryans-profile</code> only one team mate could <code class="language-plaintext highlighter-rouge">push</code> it up and everyone else would get “rejected”. So, swap this name out with your own unique branch name.</p>
+</blockquote>
+
+<p>Then <strong><code class="language-plaintext highlighter-rouge">push</code> your branch to the <code class="language-plaintext highlighter-rouge">origin</code></strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin ryans-profile <span class="nt">-u</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>🔎 You could alternatively type: <code class="language-plaintext highlighter-rouge">git push origin HEAD</code></p>
+</blockquote>
+
+<hr />
+
+<h2 id="4-open-a-pullmerge-request-on-the-remote">4. Open a Pull/Merge Request on the Remote</h2>
+
+<p>Head to the remote platform and <strong>open a new pull/merge request</strong>, requesting to merge your branch into <code class="language-plaintext highlighter-rouge">main</code>.</p>
+
+<p>It’s a good habit to verify the changes you are submitting look ok here - no extraneous edits included, no extra commits.</p>
+
+<hr />
+
+<h2 id="5-review-the-teams-work">5. Review the team’s work</h2>
+
+<p>Take some time looking at your teammates pull/merge requests that are queuing up.</p>
+
+<p>Try code reviewing <em>at least one</em> other PR and make a request for them to change something.</p>
+
+<hr />
+
+<h2 id="6-address-a-change-request">6. Address a change request</h2>
+
+<p>Whether a teammate requested you make a change or not, let’s assume one did. Your PR is <em>not approved</em> – you should go back to your local system to address the code review/change request.</p>
+
+<p><em>On your local</em>, in the <em>same branch</em> that you pushed up to the <code class="language-plaintext highlighter-rouge">origin</code> (in my case, <code class="language-plaintext highlighter-rouge">ryans-profile</code>), make the additional edit to satisfy the change request.</p>
+
+<blockquote>
+  <p><strong>Arbitrary Change Request</strong>: just add your name/fav food to your profile file.</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch ryans-profile
+<span class="c"># make the edits</span>
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Updated per code review"</span>
+git push
+</code></pre></div></div>
+
+<p><strong>Make sure your pull/merge request is now updated</strong> with your change in the “files changed” panel.</p>
+
+<hr />
+
+<p><em>All done</em></p>
+
+<p><strong>The Instructor</strong> will merge all pull requests…</p>
+
+
+      </section>
+
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Remotes: Host Your Repository | git-fundamentals</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Remotes: Host Your Repository" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="remotes-1.html" />
+<meta property="og:url" content="http://fundamentals.gitgood.training/labs/remotes-1.html" />
+<meta property="og:site_name" content="git-fundamentals" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Remotes: Host Your Repository" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Remotes: Host Your Repository","url":"http://fundamentals.gitgood.training/labs/remotes-1.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="../assets/css/style%EF%B9%96v=255445b76cbaf33159dc1916acc64a7e78872615.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="../index.html">git-fundamentals</a></h1>
+
+        <p></p>
+      </header>
+      <section>
+
+      
+<h1 id="remotes--host-your-repository">Remotes:  Host Your Repository</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>In this exercise you’ll get your repository (<code class="language-plaintext highlighter-rouge">my-book</code> or <code class="language-plaintext highlighter-rouge">my-profile</code>, it’s your choice) hosted on our Remote (GitHub, GitLab, etc).</p>
+
+<p>This is usually when we’ll work out any authentication issues as well.</p>
+
+<hr />
+
+<p>A <code class="language-plaintext highlighter-rouge">remote</code> is just a reference to an external repository, typically this is intended to be a “copy” of your own repository – something you’ll share your local changes with via a <code class="language-plaintext highlighter-rouge">push</code>.</p>
+
+<blockquote>
+  <p>🔎 You can create remote links to a repository that is hosted online, or internally on a network drive, or even other copies of the same repository on your local disk, ex: <code class="language-plaintext highlighter-rouge">git remote add local-copy ~/my-copy/.git</code> (though an extra config is needed on that copy to be able to push into it, <code class="language-plaintext highlighter-rouge">receive.denyCurrentBranch updateInstead</code>)</p>
+</blockquote>
+
+<hr />
+
+<h2 id="1-register-on-our-remote">1. Register on our Remote</h2>
+
+<p>Which remote service are we using?</p>
+
+<ul>
+  <li><a href="https://github.com">GitHub</a></li>
+  <li><a href="https://gitlab.com">GitLab</a></li>
+  <li><a href="https://bitbucket.org">BitBucket</a></li>
+  <li>Azure Devops</li>
+</ul>
+
+<p>All the above (and a few others) will have very similar functionality and workflows. Whichever we choose, I’ll refer to our “remote” and you can think of the platform we chose – ex: GitHub.</p>
+
+<p>If you don’t have an account on that remote platform yet, <strong>go sign up now</strong>.</p>
+
+<h3 id="set-up-authentication">Set Up Authentication</h3>
+
+<p>Most of these remotes now require you either use <em>ssh keys</em> or an <em>application token</em> when using https to authenticate, rather than your account password. This will be necessary to be able to <code class="language-plaintext highlighter-rouge">push</code> into any repository and <code class="language-plaintext highlighter-rouge">pull</code> from a private repository.</p>
+
+<h3 id="option-1-github">Option 1: GitHub</h3>
+
+<p><strong><em>Are you going to use the <code class="language-plaintext highlighter-rouge">ssh</code> address?</em></strong> Great! Add your public SSH Key to your account and you’re good to go.</p>
+
+<p><a href="https://github.com/settings/keys">Personal Settings &gt; SSH Keys</a>.</p>
+
+<p>More details <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">on creating and adding an SSH Key in GitHub</a>.</p>
+
+<p><strong><em>Or, are you going to use the <code class="language-plaintext highlighter-rouge">https</code> address?</em></strong>  Great! You’ll need to create an_Personal Access Token_ and use that as your password when GitHub prompts you during your next <code class="language-plaintext highlighter-rouge">git push</code>.</p>
+
+<p>Go to <a href="https://github.com/settings/tokens">Personal Settings &gt; Developer Settings &gt; Personal Access Tokens</a>.</p>
+
+<p>You’ll grant all <code class="language-plaintext highlighter-rouge">repo</code> permissions.</p>
+
+<p>You can read more <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token">about personal access tokens</a>.</p>
+
+<h4 id="option-2-bitbucket">Option 2: BitBucket</h4>
+
+<p><strong><em>Are you going to use the <code class="language-plaintext highlighter-rouge">ssh</code> address?</em></strong> Great! Add your public SSH Key to your account and you’re good to go.</p>
+
+<p><a href="https://bitbucket.org/account/settings/ssh-keys/">Personal Settings &gt; SSH Keys &gt; Add Key</a></p>
+
+<p>More details <a href="https://support.atlassian.com/bitbucket-cloud/docs/set-up-an-ssh-key/">on adding an SSH Key in BitBucket</a>.</p>
+
+<p><strong><em>Or, are you going to use the <code class="language-plaintext highlighter-rouge">https</code> address?</em></strong>  Great! You’ll need to create an <em>App Password</em> and use that as your password when BitBucket prompts you during your next <code class="language-plaintext highlighter-rouge">git push</code>.</p>
+
+<p><a href="https://bitbucket.org/account/settings/app-passwords/">Personal Settings &gt; App Passwords</a></p>
+
+<p>You’ll grant the following permissions:</p>
+<ul>
+  <li>Repositories - Read</li>
+  <li>Repositories - Write</li>
+  <li>Pull Requests - Read</li>
+  <li>Pull Requests - Write</li>
+</ul>
+
+<p>You can <a href="https://community.atlassian.com/t5/Bitbucket-articles/Announcement-Bitbucket-Cloud-account-password-usage-for-Git-over/ba-p/1948231">read more about why</a> bitbucket introduced App Passwords as a requirement.</p>
+
+<hr />
+
+<h2 id="2-create-a-project-on-the-remote">2. Create a Project On The Remote</h2>
+
+<p><strong>Create a new, empty repository</strong> on the remote platform. This is where you’ll upload your repository.</p>
+
+<p>_ ⚠️ Warning: Don’t create an initial commit when you create the repository_. You already have a history in your local repo that you intend to push. For example the remote may ask: “Do you want to start with a readme file in your project?”, which would cause an initial commit.</p>
+
+<p>This new repository exists only on the remote and has no history yet.</p>
+
+<h2 id="3-add-a-remote-locally">3. Add a <code class="language-plaintext highlighter-rouge">remote</code> locally</h2>
+
+<p><em>On your local</em>, from the command line…</p>
+
+<p><strong>Add the remote to your project</strong>. You’re only adding a reference to the remote repository address:</p>
+
+<p><em>Example: your url will be different</em></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote add origin https://github.com/rm-training/ryans-book
+</code></pre></div></div>
+
+<blockquote>
+  <p>⚠️ Make sure you choose the appropriate security protocol based on how you plan to authenticate - <code class="language-plaintext highlighter-rouge">https</code> or via ssk heys.</p>
+</blockquote>
+
+<blockquote>
+  <p>🔎 Your git config <code class="language-plaintext highlighter-rouge">user.name</code> and <code class="language-plaintext highlighter-rouge">user.email</code> are not used to authenticate <em>at all</em>, the remote only uses that information to try to match a commit to the user for informational purposes (and links between a commit and your user profile!).</p>
+</blockquote>
+
+<p><strong>View your list of remotes</strong>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote
+</code></pre></div></div>
+
+<p>You should see the one: <code class="language-plaintext highlighter-rouge">origin</code>. Nothing has been uploaded yet.</p>
+
+<h2 id="4-push-your-branch">4. Push your branch</h2>
+
+<p>We need to populate the project on the remote platform by uploading our local project data.</p>
+
+<p><strong>Use <code class="language-plaintext highlighter-rouge">push</code> to upoad your <code class="language-plaintext highlighter-rouge">main</code> (or <code class="language-plaintext highlighter-rouge">master</code>) branch</strong> to the <code class="language-plaintext highlighter-rouge">origin</code> remote:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin main <span class="nt">-u</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">push</code> uploads local data to the remote. This is typically done one branch at a time, although you can <code class="language-plaintext highlighter-rouge">push</code> multiple branches in one go.</p>
+
+<blockquote>
+  <p>🔎 Only the commits that are part of the branch(es) you are pushing are uploaded.</p>
+</blockquote>
+
+<blockquote>
+  <p>🔎 <em>What is that <code class="language-plaintext highlighter-rouge">-u</code>? That is “upstream tracking” - and you’re configuring your local <code class="language-plaintext highlighter-rouge">main</code> branch to be configured to <code class="language-plaintext highlighter-rouge">push</code> and <code class="language-plaintext highlighter-rouge">pull</code> from the remote’s branch of the same name. _Basically you’re getting some nice shortcut commands out of it</em>.</p>
+</blockquote>
+
+<p>After pushing, refresh your repository on the remote (ex: GitHub.com) to see the changes – you should be able to see all your files now hosted on the remote.</p>
+
+<hr />
+
+<p><em>Any authentication issues?</em></p>
+
+<p>These will usually occur during the <code class="language-plaintext highlighter-rouge">push</code> step, here are some troubleshooting options:</p>
+
+<ol>
+  <li>Which protocol did you use when you copied the repository url? <code class="language-plaintext highlighter-rouge">https</code> or <code class="language-plaintext highlighter-rouge">ssh</code>? The later requires you have keys set up.
+  a. <em>GitHub</em> requires you either use <code class="language-plaintext highlighter-rouge">ssh</code> or a “Personal Access Token” if you choose to use <code class="language-plaintext highlighter-rouge">https</code>.</li>
+  <li>If you have 2-factor authentication enabled it will <em>require</em> you use <code class="language-plaintext highlighter-rouge">ssh</code> + keys.</li>
+  <li>If you’re git server is only responding with a self-signed certificate, you may need to disable ssl verification:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># locally disable it per project</span>
+git config <span class="nt">--local</span> http.sslVerify <span class="nb">false</span>
+
+<span class="c"># or... you can prepend this before every git push:</span>
+<span class="nv">GIT_SSL_NO_VERIFY</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-1-push-another">Bonus 1: Push another</h2>
+
+<p>Try making an edit in a new branch, based on <code class="language-plaintext highlighter-rouge">main</code>. Then push this change up in a new branch.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch <span class="nt">-c</span> some-random-work
+<span class="c"># edit something...</span>
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s1">'Edited something random'</span>
+git push origin some-random-work
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="bonus-2-force-pushing">Bonus 2: Force Pushing</h2>
+
+<p>A <code class="language-plaintext highlighter-rouge">reset</code> to undo a commit is considered a history altering operation. Unfortunately, <code class="language-plaintext highlighter-rouge">git</code> is unable to synchronize (merge in) a change to history due to a <code class="language-plaintext highlighter-rouge">reset</code> (or <code class="language-plaintext highlighter-rouge">amend</code>, squash, <code class="language-plaintext highlighter-rouge">rebase</code>). When you force history to go backwards on a branch and you try to push it up, you’ll be rejected - let’s try this out. If you really want to <code class="language-plaintext highlighter-rouge">push</code> that <em>repaired</em> branch up you will need to <code class="language-plaintext highlighter-rouge">--force</code> it, which replaces the branch on the remote.</p>
+
+<p>Try this now…</p>
+
+<p>Amend your last commit on the <code class="language-plaintext highlighter-rouge">some-random-work</code> branch (from bonus #1).</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch some-random-work
+
+git commit <span class="nt">--amend</span>
+</code></pre></div></div>
+
+<p>Then try to <code class="language-plaintext highlighter-rouge">push</code> it - you should get a “rejected” response. This is a good thing! The remote is preventing you from accidentally replacing shared branches.</p>
+
+<p>Want to <em>force</em> it? <code class="language-plaintext highlighter-rouge">git push origin some-random-work -f</code> (or <code class="language-plaintext highlighter-rouge">--force</code>).</p>
+
+<p>–</p>
+
+<h1 id="troubleshooting">Troubleshooting</h1>
+
+<ol>
+  <li>I can’t <code class="language-plaintext highlighter-rouge">git clone</code></li>
+</ol>
+
+<p>Make sure you copied the right git address; <strong>do not copy the web address</strong>, this is not going to work (some remotes support it but not all). Copy the <code class="language-plaintext highlighter-rouge">https</code> or <code class="language-plaintext highlighter-rouge">ssh</code> (looks like: <code class="language-plaintext highlighter-rouge">git@</code>) git repository address from beneath the <code class="language-plaintext highlighter-rouge">clone</code> button.</p>
+
+<ol>
+  <li>I can’t <code class="language-plaintext highlighter-rouge">git push</code></li>
+</ol>
+
+<p>This is likely an authentication issue.</p>
+
+<p>a. Is the repository private – if so, are you added as a contributor?</p>
+
+<p>b. Are you using the right account on GitHub/BitBucket/GitLab?</p>
+
+<p>c. Are you using <code class="language-plaintext highlighter-rouge">https</code> or <code class="language-plaintext highlighter-rouge">ssh</code>? Make sure you’re using the right security protocol for how you plan to authenticate (https requires you use an app token while ssh requires you set up your public ssh key in your remote account).</p>
+
+<p>d. If you’re using https, you need to be using the <em>temporary app token</em> as your password.</p>
+
+<ol>
+  <li>Git keeps asking me for my password…</li>
+</ol>
+
+<p>Whatever you used to install git will typically set up a credential management tool; in windows, this should be bundled with “Git For Windows”.</p>
+
+<p>You can also configure git to retain auth details after a connection with:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># on a mac, the default is usually the os keychain</span>
+<span class="sb">`</span>git config <span class="nt">--global</span> credential.helper osxkeychain<span class="sb">`</span>
+
+<span class="c"># or... plaintext storage as a last resort</span>
+<span class="c"># caches for about 15 minutes</span>
+<span class="sb">`</span>git config credential.helper store<span class="sb">`</span> 
+</code></pre></div></div>
+
+<p>However, if nothing is working out you can try installing the new Git Credential Manager: 
+<a href="https://github.com/GitCredentialManager/git-credential-manager">https://github.com/GitCredentialManager/git-credential-manager</a></p>
+
+<p>This should replace whatever you had installed (as a cred/key manager).</p>
+
+
+      </section>
+
+    </div>
+    <script src="../assets/js/scale.fix.js"></script>
+    <script>
+       const accordions = document.querySelectorAll('.js-accordion');
+       console.log(accordions);
+      
+    </script>
+  </body>
+</html>
